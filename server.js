@@ -1,33 +1,40 @@
 #!/usr/bin/env node
 
 var bole     = require('bole');
-var Jthoober = require('./index');
+var jthoober = require('./index');
 var argv     = require('yargs')
-		.usage('Usage: node server.js --rules path/to/rules.js')
-		.alias('rules', 'r')
-		.describe('r', 'path to the rules file')
-		.demand('r')
-		.alias('p', 'port')
-		.describe('p', 'port to listen on')
-		.default('p', 5757)
-		.alias('h', 'host')
-		.describe('h', 'host to bind to')
-		.default('h', 'localhost')
-		.describe('mount', 'path to mount routes on')
-		.default('mount', '/webhook')
-		.describe('secret', 'shared secret with github')
-		.demand('secret')
-		.help('this usage output')
-		.argv
+	.usage('Usage: node server.js --rules path/to/rules.js')
+	.alias('rules', 'r')
+	.describe('r', 'path to the rules file')
+	.demand('r')
+	.alias('p', 'port')
+	.describe('p', 'port to listen on')
+	.default('p', 5757)
+	.alias('h', 'host')
+	.describe('h', 'host to bind to')
+	.default('h', 'localhost')
+	.describe('mount', 'path to mount routes on')
+	.default('mount', '/webhook')
+	.describe('secret', 'shared secret with github')
+	.demand('secret')
+	.help('this usage output')
+	.argv
 	;
+
+var ruleInput = require(argv.rules);
+var rules = [];
+ruleInput.forEach(function(data)
+{
+	rules.push(new jthoober.Rule(data));
+});
 
 var opts =
 {
     name:   'jthoober',
     port:   process.env.PORT || argv.port,
     host:   process.env.HOST || argv.host,
-    rules:  require(argv.rules),
-    mount:  argv.mount,
+    rules:  rules,
+    path:  argv.mount,
     secret: argv.secret,
 };
 
@@ -43,7 +50,7 @@ else
 	outputs.push({level: 'info', stream: process.stdout});
 bole.output(outputs);
 
-var server = new Jthoober(opts);
+var server = new jthoober.Server(opts);
 server.listen(opts.port, opts.host, function(err)
 {
     if (err)
