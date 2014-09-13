@@ -3,10 +3,12 @@
 var bole     = require('bole');
 var jthoober = require('./index');
 var argv     = require('yargs')
-	.usage('Usage: node server.js --rules path/to/rules.js')
+	.usage('Usage: jthoober --rules path/to/rules.js --secret sooper-sekrit')
 	.alias('rules', 'r')
-	.describe('r', 'path to the rules file')
+	.describe('rules', 'path to the rules file')
 	.demand('rules')
+	.describe('secret', 'shared secret with github')
+	.demand('secret')
 	.alias('p', 'port')
 	.describe('p', 'port to listen on')
 	.default('p', 5757)
@@ -15,8 +17,6 @@ var argv     = require('yargs')
 	.default('h', 'localhost')
 	.describe('mount', 'path to mount routes on')
 	.default('mount', '/webhook')
-	.describe('secret', 'shared secret with github')
-	.demand('secret')
 	.help('this usage output')
 	.argv
 	;
