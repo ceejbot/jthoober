@@ -17,7 +17,7 @@ var argv     = require('yargs')
 	.default('h', 'localhost')
 	.describe('mount', 'path to mount routes on')
 	.default('mount', '/webhook')
-	.help('this usage output')
+	.help('help')
 	.argv
 	;
 
