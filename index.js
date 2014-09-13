@@ -1,4 +1,3 @@
-
 var
     assert  = require('assert'),
     bole    = require('bole'),
@@ -15,13 +14,19 @@ var Jthoober = module.exports = function Jthoober(options)
     this.options = options;
     this.server = restify.createServer(options);
     this.rules = options.rules;
+    this.logger = bole('server');
 
-    this.server.post(options.mount, this.handleIncoming);
+    this.hookHandler = hooks(options);
+    this.hookHandler.on('push', this.handlePush.bind(this));
+
+    this.server.post(options.mount, this.handleIncoming.bind(this));
 };
 
-Jthoober.prototype.server  = null;
-Jthoober.prototype.options = null;
-Jthoober.prototype.rules   = null;
+Jthoober.prototype.server     = null;
+Jthoober.prototype.options    = null;
+Jthoober.prototype.rules      = null;
+Jthoober.prototype.hookHander = null;
+Jthoober.prototype.logger     = null;
 
 Jthoober.prototype.listen = function(port, host, callback)
 {
@@ -29,6 +34,16 @@ Jthoober.prototype.listen = function(port, host, callback)
 };
 
 Jthoober.prototype.handleIncoming = function(request, response, next)
+{
+    var self = this;
+    this.hookHandler(request, response, function(err)
+    {
+        self.logger.warn(err, 'while handling incoming webhook');
+    });
+    next();
+};
+
+Jthoober.prototype.handlePush = function(event)
 {
     // TODO insert code here
 };

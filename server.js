@@ -15,17 +15,20 @@ var argv     = require('yargs')
 		.default('h', 'localhost')
 		.describe('mount', 'path to mount routes on')
 		.default('mount', '/webhook')
+		.describe('secret', 'shared secret with github')
+		.demand('secret')
 		.help('this usage output')
 		.argv
 	;
 
 var opts =
 {
-    name:  'jthoober',
-    port:  process.env.PORT || argv.port,
-    host:  process.env.HOST || argv.host,
-    rules: require(argv.rules),
-	mount: argv.mount
+    name:   'jthoober',
+    port:   process.env.PORT || argv.port,
+    host:   process.env.HOST || argv.host,
+    rules:  require(argv.rules),
+    mount:  argv.mount,
+    secret: argv.secret,
 };
 
 var logger = bole('wrapper');

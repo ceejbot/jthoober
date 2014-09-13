@@ -31,6 +31,6 @@
   },
   "scripts": {
     "test": "lab -v test.js",
-    "dev": "NODE_ENV=dev node server.js --rules ./example-rules.js"
+    "dev": "NODE_ENV=dev node server.js --rules ./example-rules.js --secret sooper-sekrit"
   }
 }
