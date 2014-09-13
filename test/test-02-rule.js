@@ -77,7 +77,7 @@ describe('rule', function()
     describe('test()', function()
     {
 
-        it('test() compares the rule event to the incoming event', function(done)
+        it('compares the rule event to the incoming event', function(done)
         {
             var rule = new Rule(goodOptions);
             var event =
@@ -93,7 +93,7 @@ describe('rule', function()
             done();
         });
 
-        it('test() tests the repo name against the pattern', function(done)
+        it('tests the repo name against the pattern', function(done)
         {
             var rule = new Rule(goodOptions);
 
