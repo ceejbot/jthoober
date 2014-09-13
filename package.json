@@ -15,7 +15,8 @@
   },
   "devDependencies": {
     "lab": "~4.4.2",
-    "must": "~0.12.0"
+    "must": "~0.12.0",
+    "sinon": "~1.10.3"
   },
   "homepage": "https://github.com/ceejbot/jthoober",
   "keywords": [
@@ -30,7 +31,7 @@
     "url": "https://github.com/ceejbot/jthoober.git"
   },
   "scripts": {
-    "test": "lab -v test.js",
+    "test": "lab -v -l -c   test/",
     "dev": "NODE_ENV=dev node server.js --rules ./example-rules.js --secret sooper-sekrit"
   }
 }

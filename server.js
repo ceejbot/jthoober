@@ -34,7 +34,7 @@ var opts =
     port:   process.env.PORT || argv.port,
     host:   process.env.HOST || argv.host,
     rules:  rules,
-    path:  argv.mount,
+    path:   argv.mount,
     secret: argv.secret,
 };
 
