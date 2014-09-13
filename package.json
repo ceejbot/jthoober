@@ -1,0 +1,36 @@
+{
+  "name": "jthoober",
+  "description": "run bash scripts when you get a push event from a github webhook",
+  "version": "1.0.0",
+  "author": "C J Silverio <ceejceej@gmail.com>",
+  "bugs": {
+    "url": "https://github.com/ceejbot/jthoober/issues"
+  },
+  "dependencies": {
+    "bistre": "~1.0.0",
+    "bole": "~1.0.0",
+    "github-webhook-handler": "~0.2.1",
+    "restify": "~2.8.2",
+    "yargs": "~1.3.1"
+  },
+  "devDependencies": {
+    "lab": "~4.4.2",
+    "must": "~0.12.0"
+  },
+  "homepage": "https://github.com/ceejbot/jthoober",
+  "keywords": [
+    "github",
+    "webhook",
+    "deploy"
+  ],
+  "license": "ISC",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ceejbot/jthoober.git"
+  },
+  "scripts": {
+    "test": "lab -v test.js",
+    "dev": "NODE_ENV=dev node server.js --rules ./example-rules.js"
+  }
+}
