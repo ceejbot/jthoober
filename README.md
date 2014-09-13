@@ -6,9 +6,7 @@ A service to receive github webhook events & run scripts in response. Run custom
 
 ## Usage
 
-Set up a webhook for a project on github. Create a shared secret for github to send to the webhook & make a note of it.
-
-Set up jthoober somewhere that github has access to. Run it like this:
+Set up jthoober somewhere that github has access to. Create a shared secret for github to send to the webhook & make a note of it. Run jthoober like this:
 
 ```shell
 Usage: jthoober --rules path/to/rules.js --secret sooper-sekrit
@@ -22,6 +20,8 @@ Options:
   --help       Show help
 ```
 
+I like to use nginx to terminate tls then proxy pass through to jthoober.
+
 Set up rules that match repos to scripts to execute when jthoober receives an event. Here are some examples:
 
 ```javascript
@@ -32,7 +32,9 @@ module.exports =
 ];
 ```
 
-Rules with `passargs` set will receive the repo name as the first script argument. TODO: more?
+Rules with `passargs` set will receive the repo name as the first script argument.
+
+Set up a webhook for a project on github. Point it to your jthoober location & give it the secret string you created earlier. Observe that the test payload makes it through.
 
 ## Endpoints
 
@@ -47,6 +49,8 @@ Rules with `passargs` set will receive the repo name as the first script argumen
 ## TODO
 
 Pass more stuff from the hook event to the bash script. repo branch hash? Why not allow rules to be arbitrary node code? Or just define a handler API? But bash is so handy.
+
+Do something useful in response to the ping event, if only because it's handy for debugging.
 
 ## License
 
