@@ -6,6 +6,8 @@ var
     describe = lab.describe,
     it       = lab.it,
     demand   = require('must'),
+    restify  = require('restify'),
+    sinon    = require('sinon'),
     Server   = require('../lib/jthoober')
     ;
 
@@ -17,10 +19,55 @@ describe('server', function()
         path: '/bar',
         rules: [],
     };
+    var testServer, testClient, payload;
+
+    lab.before(function(done)
+    {
+        payload = require('./push_payload.json');
+
+        testClient = restify.createJsonClient(
+        {
+            url: 'http://localhost:5757/',
+            headers:
+            {
+                'X-Hub-Signature': 'foo' ,
+                'X-Github-Event': 'push',
+                'X-Github-Delivery': 'yah'
+            },
+        });
+        testServer = new Server(goodOptions);
+        testServer.listen(5757, 'localhost', done);
+    });
 
     describe('constructor', function(done)
     {
-        it('has tests for the contructor assertions');
+        it('requires an options object', function(done)
+        {
+            function shouldThrow() { return new Server(); }
+            shouldThrow.must.throw(/options object/);
+            done();
+        });
+
+        it('requires a path option', function(done)
+        {
+            function shouldThrow() { return new Server({}); }
+            shouldThrow.must.throw(/`path`/);
+            done();
+        });
+
+        it('requires a secret option', function(done)
+        {
+            function shouldThrow() { return new Server({ path: 'foo' }); }
+            shouldThrow.must.throw(/secret/);
+            done();
+        });
+
+        it('requires a rules array option', function(done)
+        {
+            function shouldThrow() { return new Server({ path: 'foo', secret: 'bar' }); }
+            shouldThrow.must.throw(/rules/);
+            done();
+        });
 
         it('can be constructed', function(done)
         {
@@ -39,7 +86,42 @@ describe('server', function()
         });
     });
 
-    it('has tests for handleIncoming()');
-    it('has tests for handlePush()');
-    it('has tests for handlePing()');
+    describe('routes', function()
+    {
+        it('/ping responds with 200 OK', function(done)
+        {
+            testClient.get('/ping', function(err, req, resp, body)
+            {
+                demand(err).not.exist();
+                body.must.equal('OK');
+                done();
+            });
+        });
+
+        it('/webhook responds with 200 OK', function(done)
+        {
+            testClient.post('/bar', payload, function(err, req, resp, body)
+            {
+                demand(err).not.exist();
+                resp.statusCode.must.equal(200);
+                body.must.equal('OK');
+
+                done();
+            });
+        });
+
+        it('/webhook calls the hook handler', function(done)
+        {
+            testClient.post('/bar', payload, function(err, req, resp, body)
+            {
+                demand(err).not.exist();
+
+
+                done();
+            });
+
+        });
+
+
+    });
 });
