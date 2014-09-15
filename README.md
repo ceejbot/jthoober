@@ -22,6 +22,8 @@ Options:
 
 I like to use nginx to terminate tls then proxy pass through to jthoober.
 
+### Rules
+
 The rules file must export an array of hashes; each hash is passed to the Rule constructor to make an object. (NOTE: I will make this smarter than that before publishing this.) Set up rules that match repos to scripts to execute when jthoober receives an event. Here are some examples:
 
 ```javascript
@@ -41,6 +43,17 @@ Rules may either invoke a script file or call a javascript function. The functio
 
 Rules with `passargs` set will receive the repo name as the first script argument. This options is meaningless if you are passing a javascript function instead of invoking an external script.
 
+Valid rules fields:
+
+* `pattern`: required; regxep to match against the repo name
+* `event`: github event to match on; `*` matches all events
+* `func`: javascript function to invoke on match; mutually exclusive with `script`
+* `script`: external executable to invoke on match
+* `passargs`: if set & truthy, repo name is sent to executable
+* `logfile`: full path of file to log command output to; unused for functions
+
+### Set up github
+
 Set up a webhook for a project on github. Point it to your jthoober location & give it the secret string you created earlier. Observe that the test payload makes it through.
 
 ## Endpoints
@@ -56,8 +69,6 @@ Set up a webhook for a project on github. Point it to your jthoober location & g
 ## TODO
 
 Pass more stuff from the hook event to the bash script. repo branch hash? Why not allow rules to be arbitrary node code? Or just define a handler API? But bash is so handy.
-
-Do something useful in response to the ping event, if only because it's handy for debugging.
 
 ## License
 
