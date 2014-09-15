@@ -13,6 +13,7 @@
     "bistre": "~1.0.0",
     "bole": "~1.0.0",
     "github-webhook-handler": "~0.2.1",
+    "lab": "~4.4.3",
     "restify": "~2.8.2",
     "yargs": "~1.3.1"
   },

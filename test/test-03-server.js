@@ -5,11 +5,18 @@ var
     lab      = exports.lab = Lab.script(),
     describe = lab.describe,
     it       = lab.it,
+    crypto   = require('crypto'),
     demand   = require('must'),
     restify  = require('restify'),
     sinon    = require('sinon'),
-    Server   = require('../lib/jthoober')
+    Server   = require('../lib/jthoober'),
+    Rule     = require('../lib/rule')
     ;
+
+function signPayload(key, payload)
+{
+    return 'sha1=' + crypto.createHmac('sha1', key).update(payload).digest('hex');
+}
 
 describe('server', function()
 {
@@ -17,7 +24,11 @@ describe('server', function()
     {
         secret: 'foo',
         path: '/bar',
-        rules: [],
+        rules:
+        [
+            new Rule({ event: 'ping', pattern: /.*/, func: sinon.spy() }),
+            new Rule({ event: 'push', pattern: /.*/, func: sinon.spy() }),
+        ],
     };
     var testServer, testClient, payload;
 
@@ -30,9 +41,9 @@ describe('server', function()
             url: 'http://localhost:5757/',
             headers:
             {
-                'X-Hub-Signature': 'foo' ,
-                'X-Github-Event': 'push',
-                'X-Github-Delivery': 'yah'
+                'x-github-event':    'push',
+                'x-github-delivery': 'yah',
+                'x-hub-signature':   signPayload('foo', JSON.stringify(payload)),
             },
         });
         testServer = new Server(goodOptions);
@@ -104,7 +115,7 @@ describe('server', function()
             {
                 demand(err).not.exist();
                 resp.statusCode.must.equal(200);
-                body.must.equal('OK');
+                body.must.eql({ok:true});
 
                 done();
             });
@@ -115,11 +126,10 @@ describe('server', function()
             testClient.post('/bar', payload, function(err, req, resp, body)
             {
                 demand(err).not.exist();
-
+                goodOptions.rules[1].func.called.must.be.true();
 
                 done();
             });
-
         });
 
 

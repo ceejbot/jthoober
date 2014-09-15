@@ -2,7 +2,7 @@
 
 A service to receive github webhook events & run scripts in response. Run custom testing or deploys in response to pushes. Built on top of rvagg's [github-webhook-handler](https://github.com/rvagg/github-webhook-handler) and mcavage's [restify](http://mcavage.me/node-restify/).
 
-[![Tests](http://img.shields.io/travis/ceejbot/jthoober.svg?style=flat)](http://travis-ci.org/ceejbot/jthoober)  ![Coverage](http://img.shields.io/badge/coverage-88%25-green.svg?style=flat)   [![Dependencies](http://img.shields.io/david/ceejbot/jthoober.svg?style=flat)](https://david-dm.org/ceejbot/jthoober)
+[![Tests](http://img.shields.io/travis/ceejbot/jthoober.svg?style=flat)](http://travis-ci.org/ceejbot/jthoober)  ![Coverage](http://img.shields.io/badge/coverage-93%25-green.svg?style=flat)   [![Dependencies](http://img.shields.io/david/ceejbot/jthoober.svg?style=flat)](https://david-dm.org/ceejbot/jthoober)
 
 ## Usage
 
@@ -29,10 +29,17 @@ module.exports =
 [
     { pattern: /jthoober/, event: '*', script: '/usr/local/bin/fortune' },
     { pattern: /request/, event: 'push', script: './example-script.sh', passargs: true },
+    {
+      pattern: /issue/,
+      event: 'issues',
+      func: function(event, cb) { console.log('hi'); cb(); },
+    }
 ];
 ```
 
-Rules with `passargs` set will receive the repo name as the first script argument.
+Rules may either invoke a script file or call a javascript function. The function will be passed the event object & a callback to fire when complete.
+
+Rules with `passargs` set will receive the repo name as the first script argument. This options is meaningless if you are passing a javascript function instead of invoking an external script.
 
 Set up a webhook for a project on github. Point it to your jthoober location & give it the secret string you created earlier. Observe that the test payload makes it through.
 
