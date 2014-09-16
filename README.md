@@ -45,9 +45,9 @@ module.exports =
 
 Rules may either invoke a script file or call a javascript function. The function will be passed the event object & a callback to fire when complete.
 
-Rules with `passargs` set will receive the repo name as the first script argument. This options is meaningless if you are passing a javascript function instead of invoking an external script.
+Rules with `passargs` set will receive the repo name as the first script argument & the ref of the commit (aka the branch) as the second. This option is meaningless if you are passing a javascript function instead of invoking an external script. (You have the whole event to play with in that case.)
 
-Valid rules fields:
+Valid rules options:
 
 * `pattern`: required; regxep to match against the repo name
 * `event`: github event to match on; `*` matches all events
@@ -72,4 +72,4 @@ Pass more stuff from the hook event to the bash script. repo branch hash? Why no
 
 ## License
 
-ISC
+ISC; see the LICENSE file.
