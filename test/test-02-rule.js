@@ -45,10 +45,18 @@ describe('rule', function()
             done();
         });
 
-        it('requires a script option', function(done)
+        it('requires a string script option', function(done)
+        {
+            function shouldThrow() { return new Rule({ event: '*', pattern: /foo/, script: 5 }); }
+            shouldThrow.must.throw(/script/);
+            done();
+        });
+
+        it('requires one of script or func options', function(done)
         {
             function shouldThrow() { return new Rule({ event: '*', pattern: /foo/ }); }
             shouldThrow.must.throw(/script/);
+            shouldThrow.must.throw(/func/);
             done();
         });
 
@@ -71,6 +79,22 @@ describe('rule', function()
             rule.must.have.property('repo');
             rule.must.have.property('event');
             done()
+        });
+
+        it('accepts a `func` option', function(done)
+        {
+            function swizzle(event) { event.foo = 'bar'; }
+            var rule = new Rule(
+            {
+                event:   '*',
+                pattern: /foo/,
+                func:    swizzle
+            });
+
+            rule.must.have.property('func');
+            rule.func.must.be.a.function();
+            rule.func.must.equal(swizzle);
+            done();
         });
     });
 
@@ -152,6 +176,29 @@ describe('rule', function()
                     // probably should test that we wrote some stuff
                     done();
                 });
+            });
+
+            rule.exec(event);
+        });
+
+        it('calls func() instead of the script when provided', function(done)
+        {
+            var swizzle = function(event, callback) { event.foo = 'bar'; callback(); }
+            var spy = sinon.spy(swizzle);
+            var rule = new Rule(
+            {
+                event:   '*',
+                pattern: /foo/,
+                func:    spy
+            });
+
+            var event = { event: 'push', payload: { repository: { name: 'foobie' }} };
+
+            rule.on('complete', function()
+            {
+                spy.called.must.be.true();
+                spy.calledWith(event).must.be.true();
+                done();
             });
 
             rule.exec(event);

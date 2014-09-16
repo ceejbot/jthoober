@@ -2,9 +2,11 @@
 
 A service to receive github webhook events & run scripts in response. Run custom testing or deploys in response to pushes. Built on top of rvagg's [github-webhook-handler](https://github.com/rvagg/github-webhook-handler) and mcavage's [restify](http://mcavage.me/node-restify/).
 
-[![Tests](http://img.shields.io/travis/ceejbot/jthoober.svg?style=flat)](http://travis-ci.org/ceejbot/jthoober)  ![Coverage](http://img.shields.io/badge/coverage-93%25-green.svg?style=flat)   [![Dependencies](http://img.shields.io/david/ceejbot/jthoober.svg?style=flat)](https://david-dm.org/ceejbot/jthoober)
+[![Tests](http://img.shields.io/travis/ceejbot/jthoober.svg?style=flat)](http://travis-ci.org/ceejbot/jthoober)  ![Coverage](http://img.shields.io/badge/coverage-95%25-green.svg?style=flat)   [![Dependencies](http://img.shields.io/david/ceejbot/jthoober.svg?style=flat)](https://david-dm.org/ceejbot/jthoober)
 
 ## Usage
+
+`npm install --save jthoober`
 
 Set up jthoober somewhere that github has access to. Create a shared secret for github to send to the webhook & make a note of it. Run jthoober like this:
 
@@ -21,6 +23,8 @@ Options:
 ```
 
 I like to use nginx to terminate tls then proxy pass through to jthoober.
+
+Set up a webhook for a project on github. Point it to your jthoober location & give it the secret string you created earlier. Observe that the test payload makes it through.
 
 ### Rules
 
@@ -51,10 +55,6 @@ Valid rules fields:
 * `script`: external executable to invoke on match
 * `passargs`: if set & truthy, repo name is sent to executable
 * `logfile`: full path of file to log command output to; unused for functions
-
-### Set up github
-
-Set up a webhook for a project on github. Point it to your jthoober location & give it the secret string you created earlier. Observe that the test payload makes it through.
 
 ## Endpoints
 
