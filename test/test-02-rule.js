@@ -193,7 +193,7 @@ describe('rule', function()
 
             rule.on('complete', function()
             {
-                var expected = '/usr/local/bin/fortune foobie refs/heads/master';
+                var expected = '/usr/local/bin/fortune foobie master';
                 spy.called.must.be.true();
                 spy.calledWith(expected).must.be.true();
                 done();

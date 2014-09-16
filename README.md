@@ -50,11 +50,11 @@ Rules with `passargs` set will receive the repo name as the first script argumen
 Valid rules options:
 
 * `pattern`: required; regxep to match against the repo name
-* `event`: github event to match on; `*` matches all events
+* `event`: required; github event to match on; `*` matches all events
 * `func`: javascript function to invoke on match; mutually exclusive with `script`
 * `script`: external executable to invoke on match
-* `passargs`: if set & truthy, repo name is sent to executable
-* `logfile`: full path of file to log command output to; unused for functions
+* `passargs`: if set & truthy, repo name & branch are sent to executable
+* `logfile`: full path of file to log executable output to; unused for functions
 
 ## Endpoints
 
@@ -68,7 +68,9 @@ Valid rules options:
 
 ## TODO
 
-Pass more stuff from the hook event to the bash script. repo branch hash? Why not allow rules to be arbitrary node code? Or just define a handler API? But bash is so handy.
+Pass more stuff from the hook event to the bash script. repo/refs/commit hash? Why not allow rules to be arbitrary node code? Or just define a handler API? But bash is so handy.
+
+Logging for js functions?
 
 ## License
 
