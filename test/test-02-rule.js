@@ -181,6 +181,27 @@ describe('rule', function()
             rule.exec(event);
         });
 
+        it('passes repo & refs if `passargs` is set', function(done)
+        {
+            delete goodOptions.logfile;
+            goodOptions.passargs = true;
+            var rule = new Rule(goodOptions);
+            var event = { event: 'push', payload: { ref: 'refs/heads/master', repository: { name: 'foobie' }} };
+
+            var child = require('child_process');
+            var spy = sinon.spy(child, 'exec');
+
+            rule.on('complete', function()
+            {
+                var expected = '/usr/local/bin/fortune foobie refs/heads/master';
+                spy.called.must.be.true();
+                spy.calledWith(expected).must.be.true();
+                done();
+            });
+
+            rule.exec(event);
+        });
+
         it('calls func() instead of the script when provided', function(done)
         {
             var swizzle = function(event, callback) { event.foo = 'bar'; callback(); }
@@ -192,12 +213,11 @@ describe('rule', function()
                 func:    spy
             });
 
-            var event = { event: 'push', payload: { repository: { name: 'foobie' }} };
+            var event = { event: 'push', payload: { ref: 'refs/heads/master', repository: { name: 'foobie' }} };
 
             rule.on('complete', function()
             {
                 spy.called.must.be.true();
-                spy.calledWith(event).must.be.true();
                 done();
             });
 
