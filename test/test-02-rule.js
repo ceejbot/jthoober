@@ -164,7 +164,7 @@ describe('rule', function()
 
         it('logs to a file if a path is provided', function(done)
         {
-            goodOptions.logfile = os.tmpdir() + '/test-rule.log';
+            goodOptions.logfile = os.tmpdir() + '/jthoob/test-rule.log';
             var rule = new Rule(goodOptions);
             var event = { event: 'push', payload: { repository: { name: 'foobie' }} };
             rule.on('complete', function()
