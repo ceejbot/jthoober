@@ -2,7 +2,7 @@
 
 A service to receive github webhook events & run scripts in response. Run custom testing or deploys in response to pushes. Built on top of rvagg's [github-webhook-handler](https://github.com/rvagg/github-webhook-handler) and mcavage's [restify](http://mcavage.me/node-restify/).
 
-[![Tests](http://img.shields.io/travis/ceejbot/jthoober.svg?style=flat)](http://travis-ci.org/ceejbot/jthoober)  ![Coverage](http://img.shields.io/badge/coverage-96%25-green.svg?style=flat)   [![Dependencies](http://img.shields.io/david/ceejbot/jthoober.svg?style=flat)](https://david-dm.org/ceejbot/jthoober)
+[![on npm](http://img.shields.io/npm/v/jthoober.svg?style=flat)](https://www.npmjs.org/package/jthoober)  [![Tests](http://img.shields.io/travis/ceejbot/jthoober.svg?style=flat)](http://travis-ci.org/ceejbot/jthoober)  ![Coverage](http://img.shields.io/badge/coverage-96%25-green.svg?style=flat)   [![Dependencies](http://img.shields.io/david/ceejbot/jthoober.svg?style=flat)](https://david-dm.org/ceejbot/jthoober)
 
 ## Usage
 
@@ -22,7 +22,7 @@ Options:
   --help       Show help
 ```
 
-I like to use nginx to terminate tls then proxy pass through to jthoober.
+I like to use nginx to terminate tls then proxy pass through to jthoober. I run it under upstart.
 
 Set up a webhook for a project on github. Point it to your jthoober location & give it the secret string you created earlier. Observe that the test payload makes it through.
 
@@ -60,7 +60,11 @@ Valid rules options:
 
 `/webhook` - route that responds to the webhook. Configurable; pass `--mount /foo` to the runner to mount the handler on `/foo` instead.
 
-`/ping` - responds with status ok.
+`/ping` - responds with `200 "OK"`. Use this to monitor.
+
+## Logging
+
+The server logs events & status in json to stdout. Pipe the output through `bistre --time` to get pretty logs.
 
 ## Notes
 
@@ -68,7 +72,7 @@ Valid rules options:
 
 ## TODO
 
-Pass more stuff from the hook event to the bash script. repo/refs/commit hash? Why not allow rules to be arbitrary node code? Or just define a handler API? But bash is so handy.
+Pass more stuff from the hook event to the bash script. Commit hash? Why not allow rules to be arbitrary node code? Or just define a handler API? But bash is so handy.
 
 Logging for js functions?
 
