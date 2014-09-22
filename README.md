@@ -2,7 +2,7 @@
 
 A service to receive github webhook events & run scripts in response. Run custom testing or deploys in response to pushes. Built on top of rvagg's [github-webhook-handler](https://github.com/rvagg/github-webhook-handler) and mcavage's [restify](http://mcavage.me/node-restify/).
 
-[![on npm](http://img.shields.io/npm/v/jthoober.svg?style=flat)](https://www.npmjs.org/package/jthoober)  [![Tests](http://img.shields.io/travis/ceejbot/jthoober.svg?style=flat)](http://travis-ci.org/ceejbot/jthoober)  ![Coverage](http://img.shields.io/badge/coverage-96%25-green.svg?style=flat)   [![Dependencies](http://img.shields.io/david/ceejbot/jthoober.svg?style=flat)](https://david-dm.org/ceejbot/jthoober)
+[![on npm](http://img.shields.io/npm/v/jthoober.svg?style=flat)](https://www.npmjs.org/package/jthoober)  [![Tests](http://img.shields.io/travis/ceejbot/jthoober.svg?style=flat)](http://travis-ci.org/ceejbot/jthoober)  ![Coverage](http://img.shields.io/badge/coverage-91%25-green.svg?style=flat)   [![Dependencies](http://img.shields.io/david/ceejbot/jthoober.svg?style=flat)](https://david-dm.org/ceejbot/jthoober)
 
 ## Usage
 
@@ -14,17 +14,20 @@ Set up jthoober somewhere that github has access to. Create a shared secret for 
 Usage: jthoober --rules path/to/rules.js --secret sooper-sekrit
 
 Options:
-  --rules, -r  path to the rules file     [required]
-  --secret     shared secret with github  [required]
-  -p, --port   port to listen on          [default: 5757]
-  -h, --host   host to bind to            [default: "localhost"]
-  --mount      path to mount routes on    [default: "/webhook"]
+  --rules, -r  path to the rules file                         [required]
+  --secret     shared secret with github                      [required]
+  -p, --port   port to listen on                              [default: 5757]
+  -h, --host   host to bind to                                [default: "localhost"]
+  --mount      path to mount routes on                        [default: "/webhook"]
+  --slack      full url of slack webhook for posting results
   --help       Show help
 ```
 
 I like to use nginx to terminate tls then proxy pass through to jthoober. I run it under upstart.
 
 Set up a webhook for a project on github. Point it to your jthoober location & give it the secret string you created earlier. Observe that the test payload makes it through.
+
+Optionally, set up an incoming webhook for your Slack organization to report results to a specific channel.
 
 ### Rules
 

@@ -17,6 +17,7 @@ var argv     = require('yargs')
 	.default('h', 'localhost')
 	.describe('mount', 'path to mount routes on')
 	.default('mount', '/webhook')
+	.describe('slack', 'full url of slack webhook for posting results')
 	.help('help')
 	.argv
 	;
@@ -49,6 +50,12 @@ if (process.env.NODE_ENV === 'dev')
 else
 	outputs.push({level: 'info', stream: process.stdout});
 bole.output(outputs);
+
+if (argv.slack)
+{
+	jthoober.Slacker.createClient(argv);
+	jthoober.Slacker.report('this is a test');
+}
 
 var server = new jthoober.Server(opts);
 server.listen(opts.port, opts.host, function(err)
