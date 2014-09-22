@@ -54,7 +54,6 @@ bole.output(outputs);
 if (argv.slack)
 {
 	jthoober.Slacker.createClient(argv);
-	jthoober.Slacker.report('this is a test');
 }
 
 var server = new jthoober.Server(opts);
