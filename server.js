@@ -2,6 +2,7 @@
 
 var bole     = require('bole');
 var jthoober = require('./index');
+var path     = require('path');
 var argv     = require('yargs')
 	.usage('Usage: jthoober --rules path/to/rules.js --secret sooper-sekrit')
 	.alias('rules', 'r')
@@ -20,9 +21,11 @@ var argv     = require('yargs')
 	.describe('slack', 'full url of slack webhook for posting results')
 	.help('help')
 	.argv
-	;
+;
 
-var ruleInput = require(argv.rules);
+// resolve ./ to the current working directory executing jthoober.
+var rulesModule = argv.rules.match(/^.\//) ? path.resolve(process.cwd(), argv.rules) : argv.rules;
+var ruleInput = require(rulesModule);
 var rules = [];
 ruleInput.forEach(function(data)
 {
