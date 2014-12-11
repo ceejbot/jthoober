@@ -223,5 +223,27 @@ describe('rule', function()
 
             rule.exec(event);
         });
+
+        it('deals with a func() error when the func() errors', function(done){
+            var swizzle = function(event, callback) { event.foo = 'bar'; callback(new Error('oops!')); }
+            var spy = sinon.spy(swizzle);
+            var rule = new Rule(
+            {
+                event:   '*',
+                pattern: /foo/,
+                func:    spy
+            });
+
+            var event = { event: 'push', payload: { ref: 'refs/heads/master', repository: { name: 'foobie' }} };
+
+            rule.on('error', function(err)
+            {
+                spy.called.must.be.true();
+                err.must.be.an.instanceOf(Error);
+                done();
+            });
+
+            rule.exec(event);
+        });
     });
 });
