@@ -19,7 +19,7 @@ Options:
   -p, --port   port to listen on                              [default: 5757]
   -h, --host   host to bind to                                [default: "localhost"]
   --mount      path to mount routes on                        [default: "/webhook"]
-  --slack      full url of slack webhook for posting results
+  --slack      full url of slack webhook to post results
   --help       Show help
 ```
 
@@ -39,9 +39,23 @@ module.exports =
     { pattern: /jthoober/, event: '*', script: '/usr/local/bin/fortune' },
     { pattern: /request/, event: 'push', script: './example-script.sh', passargs: true },
     {
+      pattern: /reponame/,
+      event: 'push',
+      script: './example-script.js',
+      cmd: 'node',
+      args: [process.env, '-t 100']
+      // will result in `node ./example-script.js <repoName> <branchName> <env> -t 100`
+    },
+    {
       pattern: /issue/,
       event: 'issues',
       func: function(event, cb) { console.log('hi'); cb(); },
+    },
+    {
+      pattern: /manyissues/,
+      event: 'issues',
+      args: [process.env, 'cheddar']
+      func: function(event, env, cheese, cb) { console.log('hi'); cb(); },
     }
 ];
 ```
@@ -58,6 +72,8 @@ Valid rules options:
 * `script`: external executable to invoke on match
 * `passargs`: if set & truthy, repo name & branch are sent to executable
 * `logfile`: full path of file to log executable output to; unused for functions
+* `cmd`: the executable to run the script with; unused for functions. e.g. `node`
+* `args`: an array of additional args to pass to the script or function. If `parseargs` is `true` these args will come after the repo and branch names. If `func` is passed, these args will come after the event name.
 
 ## Endpoints
 
