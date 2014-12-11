@@ -3,6 +3,10 @@
   "description": "run bash scripts when you get a push event from a github webhook",
   "version": "0.3.2",
   "author": "C J Silverio <ceejceej@gmail.com>",
+  "contributors": [
+    "Joey Baker <joey@byjoeybaker.com>",
+    "C J Silverio <ceejceej@gmail.com>"
+  ],
   "bin": {
     "jthoober": "server.js"
   },
