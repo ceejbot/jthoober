@@ -162,6 +162,35 @@ describe('rule', function()
             rule.exec(event);
         });
 
+        it('runs the provided script with `cmd` when provided', function(done)
+        {
+            goodOptions.cmd = 'bash'
+            var spy = sinon.spy(child, 'exec');
+            var rule = new Rule(goodOptions);
+            var event =
+            {
+                event: 'push',
+                payload: { repository: { name: 'foobie' }}
+            };
+
+            var sawRunning;
+
+            rule.on('running', function() { sawRunning = true; })
+            rule.on('complete', function()
+            {
+                sawRunning.must.be.true();
+                spy.called.must.be.true();
+                spy.calledWith('bash /usr/local/bin/fortune').must.be.true();
+
+                // cleanup
+                child.exec.restore();
+                delete goodOptions.cmd;
+                done();
+            });
+
+            rule.exec(event);
+        });
+
         it('logs to a file if a path is provided', function(done)
         {
             goodOptions.logfile = os.tmpdir() + '/jthoob/test-rule.log';
@@ -173,17 +202,21 @@ describe('rule', function()
                 {
                     demand(err).not.exist();
                     data.length.must.be.above(0);
+
+                    // cleanup
+                    delete goodOptions.logfile;
+
                     // probably should test that we wrote some stuff
                     done();
                 });
             });
 
             rule.exec(event);
+
         });
 
         it('passes repo & refs if `passargs` is set', function(done)
         {
-            delete goodOptions.logfile;
             goodOptions.passargs = true;
             var rule = new Rule(goodOptions);
             var event = { event: 'push', payload: { ref: 'refs/heads/master', repository: { name: 'foobie' }} };
@@ -196,10 +229,41 @@ describe('rule', function()
                 var expected = '/usr/local/bin/fortune foobie master';
                 spy.called.must.be.true();
                 spy.calledWith(expected).must.be.true();
+
+                // cleanup
+                spy.restore();
+                delete goodOptions.parseargs;
                 done();
             });
 
             rule.exec(event);
+        });
+
+        it('passes additional args when `args` is set', function(done)
+        {
+            goodOptions.passargs = true;
+            goodOptions.args = ['hi', 'bye']
+            var rule = new Rule(goodOptions);
+            var event = { event: 'push', payload: { ref: 'refs/heads/master', repository: { name: 'foobie' }} };
+
+            var child = require('child_process');
+            var spy = sinon.spy(child, 'exec');
+
+            rule.on('complete', function()
+            {
+                var expected = '/usr/local/bin/fortune foobie master hi bye';
+                spy.called.must.be.true();
+                spy.calledWith(expected).must.be.true();
+
+                // cleanup
+                delete goodOptions.parseargs;
+                delete goodOptions.args;
+                spy.restore();
+                done();
+            });
+
+            rule.exec(event);
+
         });
 
         it('calls func() instead of the script when provided', function(done)
@@ -218,6 +282,32 @@ describe('rule', function()
             rule.on('complete', function()
             {
                 spy.called.must.be.true();
+                done();
+            });
+
+            rule.exec(event);
+        });
+
+        it('calls func() with `args` when provided', function(done)
+        {
+            var swizzle = function(event, arg1, arg2, callback) { event.foo = 'bar'; callback(); }
+            var spy = sinon.spy(swizzle);
+            var args = ['hi', 'bye']
+            var event = '*'
+            var rule = new Rule(
+            {
+                event:   event,
+                pattern: /foo/,
+                func:    spy,
+                args:    args
+            });
+
+            var event = { event: 'push', payload: { ref: 'refs/heads/master', repository: { name: 'foobie' }} };
+
+            rule.on('complete', function()
+            {
+                spy.called.must.be.true();
+                spy.calledWith(event, args[0], args[1]).must.be.true();
                 done();
             });
 
