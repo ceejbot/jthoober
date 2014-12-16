@@ -10,7 +10,9 @@ var
     fs       = require('fs'),
     os       = require('os'),
     sinon    = require('sinon'),
-    Rule     = require('../lib/rule')
+    Rule     = require('../lib/rule'),
+    path     = require('path'),
+    rimraf   = require('rimraf')
     ;
 
 describe('rule', function()
@@ -193,20 +195,32 @@ describe('rule', function()
 
         it('logs to a file if a path is provided', function(done)
         {
-            goodOptions.logfile = os.tmpdir() + '/jthoob/test-rule.log';
+
+            var logfile = path.join(os.tmpdir(), '/jthoob/test-rule.log');
+
+            goodOptions.logfile = logfile;
+
             var rule = new Rule(goodOptions);
             var event = { event: 'push', payload: { repository: { name: 'foobie' }} };
+
+
             rule.on('complete', function()
             {
+
                 fs.readFile(goodOptions.logfile, 'utf8', function(err, data)
                 {
                     demand(err).not.exist();
                     data.length.must.be.above(0);
+                    // ensure we have some good data
+                    data.indexOf('starting execution; cmd=' + goodOptions.script).must.be.equal.to(30);
+                    // currently the length is 279
+                    // be approximate so that this test doesn't needlessly fail
+                    // we expect the last line to be -----
+                    data.lastIndexOf('----').must.be.below(280)
 
                     // cleanup
-                    delete goodOptions.logfile;
-
-                    // probably should test that we wrote some stuff
+                    goodOptions.logfile = null;
+                    rimraf.sync(logfile);
                     done();
                 });
             });
