@@ -230,6 +230,24 @@ describe('rule', function()
 
         });
 
+        it('emits a complete event with error data', function(done)
+        {
+
+            var rule = new Rule(goodOptions);
+            var event = { event: 'push', payload: { repository: { name: 'foobie' }} };
+
+
+            rule.on('complete', function(exitCode, errOutput)
+            {
+                exitCode.must.be.equal.to(127)
+                demand(errOutput).must.exist()
+                done()
+            });
+
+            rule.exec(event);
+
+        });
+
         it('passes repo & refs if `passargs` is set', function(done)
         {
             goodOptions.passargs = true;
