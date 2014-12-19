@@ -209,14 +209,15 @@ describe('rule', function()
 
                 fs.readFile(goodOptions.logfile, 'utf8', function(err, data)
                 {
+                    // cleanup, no matter what fails
+                    goodOptions.logfile = null;
+                    rimraf.sync(logfile);
+
                     demand(err).not.exist();
                     data.length.must.be.above(0);
                     // ensure we have some good data
                     data.indexOf('starting execution; cmd=' + goodOptions.script).must.be.equal.to(30);
 
-                    // clean up
-                    goodOptions.logfile = null;
-                    rimraf.sync(logfile);
                     done();
                 });
             });
