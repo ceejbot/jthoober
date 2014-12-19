@@ -217,6 +217,10 @@ describe('rule', function()
                     data.length.must.be.above(0);
                     // ensure we have some good data
                     data.indexOf('starting execution; cmd=' + goodOptions.script).must.be.equal.to(30);
+                    // currently the length is 295
+                    // be approximate so that this test doesn't needlessly fail
+                    // we expect the last line to be -----
+                    data.lastIndexOf('----').must.be.below(295)
 
                     done();
                 });
