@@ -209,16 +209,39 @@ describe('rule', function()
 
                 fs.readFile(goodOptions.logfile, 'utf8', function(err, data)
                 {
+                    // cleanup, no matter what fails
+                    goodOptions.logfile = null;
+                    rimraf.sync(logfile);
+
                     demand(err).not.exist();
                     data.length.must.be.above(0);
                     // ensure we have some good data
                     data.indexOf('starting execution; cmd=' + goodOptions.script).must.be.equal.to(30);
+                    // currently the length is 295
+                    // be approximate so that this test doesn't needlessly fail
+                    // we expect the last line to be -----
+                    data.lastIndexOf('----').must.be.below(295)
 
-                    // clean up
-                    goodOptions.logfile = null;
-                    rimraf.sync(logfile);
                     done();
                 });
+            });
+
+            rule.exec(event);
+
+        });
+
+        it('emits a complete event with error data', function(done)
+        {
+
+            var rule = new Rule(goodOptions);
+            var event = { event: 'push', payload: { repository: { name: 'foobie' }} };
+
+
+            rule.on('complete', function(exitCode, errOutput)
+            {
+                exitCode.must.be.equal.to(127)
+                demand(errOutput).must.exist()
+                done()
             });
 
             rule.exec(event);

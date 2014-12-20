@@ -84,6 +84,7 @@ Valid rules options:
 * `logfile`: full path of file to log executable output to; unused for functions
 * `cmd`: the executable to run the script with; unused for functions. e.g. `node`
 * `args`: an array of additional args to pass to the script or function. If `parseargs` is `true` these args will come after the repo and branch names. If `func` is passed, these args will come after the event name.
+* `slack`: an object of slack options to pass to the slack reporter. Only used if `--slack` is passed.
 
 ## Endpoints
 
