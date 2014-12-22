@@ -135,6 +135,25 @@ describe('rule', function()
 
             done();
         });
+
+        it('tests the branch name against the `branchPattern`', function(done)
+        {
+            goodOptions.branchPattern = /master/
+            var rule = new Rule(goodOptions);
+
+            var event =
+            {
+                event: 'push',
+                payload: { repository: { name: 'foobie' }, ref: 'refs/heads/master'}
+            };
+
+            rule.test(event).must.be.true();
+            rule.branchPattern = /bletch/;
+            rule.test(event).must.be.false();
+
+            delete goodOptions.branchPattern
+            done();
+        });
     });
 
     describe('exec()', function()
