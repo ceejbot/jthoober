@@ -135,6 +135,25 @@ describe('rule', function()
 
             done();
         });
+
+        it('tests the branch name against the `branchPattern`', function(done)
+        {
+            goodOptions.branchPattern = /master/
+            var rule = new Rule(goodOptions);
+
+            var event =
+            {
+                event: 'push',
+                payload: { repository: { name: 'foobie' }, ref: 'refs/heads/master'}
+            };
+
+            rule.test(event).must.be.true();
+            rule.branchPattern = /bletch/;
+            rule.test(event).must.be.false();
+
+            delete goodOptions.branchPattern
+            done();
+        });
     });
 
     describe('exec()', function()
@@ -193,6 +212,35 @@ describe('rule', function()
             rule.exec(event);
         });
 
+        it('it parses stdout output for errors', function(done)
+        {
+            goodOptions.script = path.join(__dirname, 'script.sh')
+            var rule = new Rule(goodOptions);
+            var event =
+            {
+                event: 'push',
+                payload: { repository: { name: 'foobie' }}
+            };
+
+            var sawRunning;
+            sinon.spy(rule.logger, 'error')
+            sinon.spy(rule.logger, 'debug')
+
+            rule.on('running', function() { sawRunning = true; })
+            rule.on('complete', function()
+            {
+                sawRunning.must.be.true();
+                rule.logger.error.callCount.must.equal(3)
+                rule.logger.debug.callCount.must.equal(2)
+
+                // cleanup
+                goodOptions.script = '/usr/local/bin/fortune'
+                done();
+            });
+
+            rule.exec(event);
+        });
+
         it('logs to a file if a path is provided', function(done)
         {
 
@@ -209,16 +257,39 @@ describe('rule', function()
 
                 fs.readFile(goodOptions.logfile, 'utf8', function(err, data)
                 {
+                    // cleanup, no matter what fails
+                    goodOptions.logfile = null;
+                    rimraf.sync(logfile);
+
                     demand(err).not.exist();
                     data.length.must.be.above(0);
                     // ensure we have some good data
                     data.indexOf('starting execution; cmd=' + goodOptions.script).must.be.equal.to(30);
+                    // currently the length is 295
+                    // be approximate so that this test doesn't needlessly fail
+                    // we expect the last line to be -----
+                    data.lastIndexOf('----').must.be.below(295)
 
-                    // clean up
-                    goodOptions.logfile = null;
-                    rimraf.sync(logfile);
                     done();
                 });
+            });
+
+            rule.exec(event);
+
+        });
+
+        it('emits a complete event with error data', function(done)
+        {
+
+            var rule = new Rule(goodOptions);
+            var event = { event: 'push', payload: { repository: { name: 'foobie' }} };
+
+
+            rule.on('complete', function(exitCode, errOutput)
+            {
+                exitCode.must.be.equal.to(127)
+                demand(errOutput).must.exist()
+                done()
             });
 
             rule.exec(event);

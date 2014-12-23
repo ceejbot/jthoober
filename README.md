@@ -36,8 +36,20 @@ The rules file must export an array of hashes; each hash is passed to the Rule c
 ```javascript
 module.exports =
 [
-    { pattern: /jthoober/, event: '*', script: '/usr/local/bin/fortune' },
-    { pattern: /request/, event: 'push', script: './example-script.sh', passargs: true },
+    { pattern:/jthoober/,
+      event: '*',
+      script: '/usr/local/bin/fortune'
+    },
+    { pattern: /request/,
+      event: 'push',
+      script: './example-script.sh',
+      passargs: true
+    },
+    { pattern: /reponame/,
+      branchPattern: /master/,
+      event: 'push',
+      script: './example-script.sh'
+    },
     {
       pattern: /reponame/,
       event: 'push',
@@ -76,7 +88,8 @@ Rules with `passargs` set will receive the repo name as the first script argumen
 
 Valid rules options:
 
-* `pattern`: required; regxep to match against the repo name
+* `pattern`: required; regexp to match against the repo name
+* `branchPattern`: regexp to match against the branch name.
 * `event`: required; github event to match on; `*` matches all events
 * `func`: javascript function to invoke on match; mutually exclusive with `script`
 * `script`: external executable to invoke on match
@@ -84,6 +97,7 @@ Valid rules options:
 * `logfile`: full path of file to log executable output to; unused for functions
 * `cmd`: the executable to run the script with; unused for functions. e.g. `node`
 * `args`: an array of additional args to pass to the script or function. If `parseargs` is `true` these args will come after the repo and branch names. If `func` is passed, these args will come after the event name.
+* `slack`: an object of slack options to pass to the slack reporter. Only used if `--slack` is passed.
 
 ## Endpoints
 
