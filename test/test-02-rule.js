@@ -80,7 +80,7 @@ describe('rule', function()
             rule.script.must.equal(goodOptions.script);
             rule.must.have.property('repo');
             rule.must.have.property('event');
-            done()
+            done();
         });
 
         it('accepts a `func` option', function(done)
@@ -138,7 +138,7 @@ describe('rule', function()
 
         it('tests the branch name against the `branchPattern`', function(done)
         {
-            goodOptions.branchPattern = /master/
+            goodOptions.branchPattern = /master/;
             var rule = new Rule(goodOptions);
 
             var event =
@@ -151,7 +151,7 @@ describe('rule', function()
             rule.branchPattern = /bletch/;
             rule.test(event).must.be.false();
 
-            delete goodOptions.branchPattern
+            delete goodOptions.branchPattern;
             done();
         });
     });
@@ -170,7 +170,7 @@ describe('rule', function()
 
             var sawRunning;
 
-            rule.on('running', function() { sawRunning = true; })
+            rule.on('running', function() { sawRunning = true; });
             rule.on('complete', function()
             {
                 sawRunning.must.be.true();
@@ -185,7 +185,7 @@ describe('rule', function()
 
         it('runs the provided script with `cmd` when provided', function(done)
         {
-            goodOptions.cmd = 'bash'
+            goodOptions.cmd = 'bash';
             var spy = sinon.spy(child, 'exec');
             var rule = new Rule(goodOptions);
             var event =
@@ -196,7 +196,7 @@ describe('rule', function()
 
             var sawRunning;
 
-            rule.on('running', function() { sawRunning = true; })
+            rule.on('running', function() { sawRunning = true; });
             rule.on('complete', function()
             {
                 sawRunning.must.be.true();
@@ -214,7 +214,7 @@ describe('rule', function()
 
         it('it parses stdout output for errors', function(done)
         {
-            goodOptions.script = path.join(__dirname, 'script.sh')
+            goodOptions.script = path.join(__dirname, 'script.sh');
             var rule = new Rule(goodOptions);
             var event =
             {
@@ -223,18 +223,18 @@ describe('rule', function()
             };
 
             var sawRunning;
-            sinon.spy(rule.logger, 'error')
-            sinon.spy(rule.logger, 'debug')
+            sinon.spy(rule.logger, 'error');
+            sinon.spy(rule.logger, 'debug');
 
-            rule.on('running', function() { sawRunning = true; })
+            rule.on('running', function() { sawRunning = true; });
             rule.on('complete', function()
             {
                 sawRunning.must.be.true();
-                rule.logger.error.callCount.must.equal(3)
-                rule.logger.debug.callCount.must.equal(2)
+                rule.logger.error.callCount.must.equal(3);
+                rule.logger.debug.callCount.must.equal(2);
 
                 // cleanup
-                goodOptions.script = '/usr/local/bin/fortune'
+                goodOptions.script = '/usr/local/bin/fortune';
                 done();
             });
 
@@ -265,10 +265,6 @@ describe('rule', function()
                     data.length.must.be.above(0);
                     // ensure we have some good data
                     data.indexOf('starting execution; cmd=' + goodOptions.script).must.be.equal.to(30);
-                    // currently the length is 295
-                    // be approximate so that this test doesn't needlessly fail
-                    // we expect the last line to be -----
-                    data.lastIndexOf('----').must.be.below(295)
 
                     done();
                 });
@@ -280,20 +276,17 @@ describe('rule', function()
 
         it('emits a complete event with error data', function(done)
         {
-
             var rule = new Rule(goodOptions);
             var event = { event: 'push', payload: { repository: { name: 'foobie' }} };
 
-
             rule.on('complete', function(exitCode, errOutput)
             {
-                exitCode.must.be.equal.to(127)
-                demand(errOutput).must.exist()
-                done()
+                exitCode.must.be.equal.to(127);
+                demand(errOutput).must.exist();
+                done();
             });
 
             rule.exec(event);
-
         });
 
         it('passes repo & refs if `passargs` is set', function(done)
@@ -323,7 +316,7 @@ describe('rule', function()
         it('passes additional args when `args` is set', function(done)
         {
             goodOptions.passargs = true;
-            goodOptions.args = ['hi', 'bye']
+            goodOptions.args = ['hi', 'bye'];
             var rule = new Rule(goodOptions);
             var event = { event: 'push', payload: { ref: 'refs/heads/master', repository: { name: 'foobie' }} };
 
@@ -349,7 +342,7 @@ describe('rule', function()
 
         it('calls func() instead of the script when provided', function(done)
         {
-            var swizzle = function(event, callback) { event.foo = 'bar'; callback(); }
+            var swizzle = function(event, callback) { event.foo = 'bar'; callback(); };
             var spy = sinon.spy(swizzle);
             var rule = new Rule(
             {
@@ -371,10 +364,10 @@ describe('rule', function()
 
         it('calls func() with `args` when provided', function(done)
         {
-            var swizzle = function(event, arg1, arg2, callback) { event.foo = 'bar'; callback(); }
+            var swizzle = function(event, arg1, arg2, callback) { event.foo = 'bar'; callback(); };
             var spy = sinon.spy(swizzle);
-            var args = ['hi', 'bye']
-            var event = '*'
+            var args = ['hi', 'bye'];
+            var event = '*';
             var rule = new Rule(
             {
                 event:   event,
@@ -383,20 +376,20 @@ describe('rule', function()
                 args:    args
             });
 
-            var event = { event: 'push', payload: { ref: 'refs/heads/master', repository: { name: 'foobie' }} };
+            var payload = { event: 'push', payload: { ref: 'refs/heads/master', repository: { name: 'foobie' }} };
 
             rule.on('complete', function()
             {
                 spy.called.must.be.true();
-                spy.calledWith(event, args[0], args[1]).must.be.true();
+                spy.calledWith(payload, args[0], args[1]).must.be.true();
                 done();
             });
 
-            rule.exec(event);
+            rule.exec(payload);
         });
 
         it('deals with a func() error when the func() errors', function(done){
-            var swizzle = function(event, callback) { event.foo = 'bar'; callback(new Error('oops!')); }
+            var swizzle = function(event, callback) { event.foo = 'bar'; callback(new Error('oops!')); };
             var spy = sinon.spy(swizzle);
             var rule = new Rule(
             {

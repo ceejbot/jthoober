@@ -43,6 +43,7 @@
   },
   "scripts": {
     "test": "lab -v -l -c   test/",
-    "dev": "NODE_ENV=dev node server.js --rules ./example-rules.js --secret sooper-sekrit"
+    "dev": "NODE_ENV=dev node server.js --rules ./example-rules.js --secret sooper-sekrit",
+    "lint": "jshint lib/*.js *.js test/*.js"
   }
 }

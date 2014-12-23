@@ -86,12 +86,12 @@ describe('server', function()
             j.must.have.property('rules');
             j.rules.must.be.an.array();
             j.must.have.property('server');
-            j.server.constructor.name.must.equal('Server')
+            j.server.constructor.name.must.equal('Server');
             j.must.have.property('hookHandler');
 
             j.must.have.property('logger');
             j.logger.must.be.a.function();
-            j.logger.must.have.property('info')
+            j.logger.must.have.property('info');
 
             done();
         });
@@ -131,7 +131,5 @@ describe('server', function()
                 done();
             });
         });
-
-
     });
 });
