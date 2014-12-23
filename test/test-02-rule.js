@@ -212,6 +212,35 @@ describe('rule', function()
             rule.exec(event);
         });
 
+        it('it parses stdout output for errors', function(done)
+        {
+            goodOptions.script = path.join(__dirname, 'script.sh')
+            var rule = new Rule(goodOptions);
+            var event =
+            {
+                event: 'push',
+                payload: { repository: { name: 'foobie' }}
+            };
+
+            var sawRunning;
+            sinon.spy(rule.logger, 'error')
+            sinon.spy(rule.logger, 'debug')
+
+            rule.on('running', function() { sawRunning = true; })
+            rule.on('complete', function()
+            {
+                sawRunning.must.be.true();
+                rule.logger.error.callCount.must.equal(3)
+                rule.logger.debug.callCount.must.equal(2)
+
+                // cleanup
+                goodOptions.script = '/usr/local/bin/fortune'
+                done();
+            });
+
+            rule.exec(event);
+        });
+
         it('logs to a file if a path is provided', function(done)
         {
 
