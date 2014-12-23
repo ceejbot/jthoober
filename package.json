@@ -18,16 +18,16 @@
     "bole": "~1.0.0",
     "github-webhook-handler": "~0.3.4",
     "mkdirp": "~0.5.0",
-    "restify": "~2.8.3",
+    "restify": "~2.8.4",
     "through2": "^0.6.3",
     "touch": "0.0.3",
     "yargs": "~1.3.3"
   },
   "devDependencies": {
-    "lab": "~5.1.0",
+    "lab": "~5.1.1",
     "must": "~0.12.0",
     "rimraf": "^2.2.8",
-    "sinon": "~1.12.1"
+    "sinon": "~1.12.2"
   },
   "homepage": "https://github.com/ceejbot/jthoober",
   "keywords": [
