@@ -243,14 +243,12 @@ describe('rule', function()
 
         it('logs to a file if a path is provided', function(done)
         {
-
             var logfile = path.join(os.tmpdir(), '/jthoob/test-rule.log');
 
             goodOptions.logfile = logfile;
 
             var rule = new Rule(goodOptions);
             var event = { event: 'push', payload: { repository: { name: 'foobie' }} };
-
 
             rule.on('complete', function()
             {
@@ -271,12 +269,18 @@ describe('rule', function()
             });
 
             rule.exec(event);
-
         });
 
         it('emits a complete event with error data', function(done)
         {
-            var rule = new Rule(goodOptions);
+            var shouldProduceError =
+            {
+                event: '*',
+                pattern: /foo/,
+                script: '/bin/noexist'
+            };
+
+            var rule = new Rule(shouldProduceError);
             var event = { event: 'push', payload: { repository: { name: 'foobie' }} };
 
             rule.on('complete', function(exitCode, errOutput)
