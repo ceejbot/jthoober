@@ -21,10 +21,10 @@
     "restify": "~2.8.5",
     "through2": "^0.6.3",
     "touch": "0.0.3",
-    "yargs": "~2.3.0"
+    "yargs": "^3.4.5"
   },
   "devDependencies": {
-    "lab": "~5.1.1",
+    "lab": "^5.3.0",
     "must": "~0.12.0",
     "rimraf": "^2.2.8",
     "sinon": "~1.12.2"
