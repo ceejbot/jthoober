@@ -2,7 +2,7 @@
 
 A service to receive github webhook events & run scripts in response. Run custom testing or deploys in response to pushes. Built on top of rvagg's [github-webhook-handler](https://github.com/rvagg/github-webhook-handler) and mcavage's [restify](http://mcavage.me/node-restify/).
 
-[![on npm](http://img.shields.io/npm/v/jthoober.svg?style=flat)](https://www.npmjs.org/package/jthoober)  [![Tests](http://img.shields.io/travis/ceejbot/jthoober.svg?style=flat)](http://travis-ci.org/ceejbot/jthoober)  ![Coverage](http://img.shields.io/badge/coverage-95%25-green.svg?style=flat)   [![Dependencies](http://img.shields.io/david/ceejbot/jthoober.svg?style=flat)](https://david-dm.org/ceejbot/jthoober)
+[![on npm](http://img.shields.io/npm/v/jthoober.svg?style=flat)](https://www.npmjs.org/package/jthoober)  [![Tests](http://img.shields.io/travis/ceejbot/jthoober.svg?style=flat)](http://travis-ci.org/ceejbot/jthoober)  ![Coverage](http://img.shields.io/badge/coverage-95%25-green.svg?style=flat)   [![Dependencies](http://img.shields.io/david/ceejbot/jthoober.svg?style=flat)](https://david-dm.org/ceejbot/jthoober) ![io.js supported](https://img.shields.io/badge/io.js-supported-green.svg?style=flat)
 
 ## Usage
 

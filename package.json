@@ -15,7 +15,11 @@
   },
   "config": {
     "blanket": {
-      "pattern": [ "lib", "index.js", "server.js"],
+      "pattern": [
+        "lib",
+        "index.js",
+        "server.js"
+      ],
       "data-cover-never": [
         "node_modules",
         "test"
@@ -43,7 +47,8 @@
     "mocoverage": "~1.0.0",
     "must": "~0.12.0",
     "rimraf": "^2.2.8",
-    "sinon": "~1.14.1"
+    "sinon": "~1.14.1",
+    "travis-cov": "~0.2.5"
   },
   "homepage": "https://github.com/ceejbot/jthoober",
   "keywords": [
