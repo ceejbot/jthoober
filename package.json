@@ -13,21 +13,37 @@
   "bugs": {
     "url": "https://github.com/ceejbot/jthoober/issues"
   },
+  "config": {
+    "blanket": {
+      "pattern": [ "lib", "index.js", "server.js"],
+      "data-cover-never": [
+        "node_modules",
+        "test"
+      ],
+      "output-reporter": "spec",
+      "travis-cov": {
+        "threshold": 90
+      }
+    }
+  },
   "dependencies": {
     "bistre": "~1.0.1",
     "bole": "~2.0.0",
     "github-webhook-handler": "~0.3.4",
     "mkdirp": "~0.5.0",
-    "restify": "~2.8.5",
+    "restify": "~3.0.1",
+    "rimraf": "~2.3.2",
     "through2": "^0.6.3",
     "touch": "0.0.3",
-    "yargs": "^3.4.5"
+    "yargs": "~3.5.4"
   },
   "devDependencies": {
-    "lab": "^5.3.0",
+    "blanket": "~1.1.6",
+    "mocha": "~2.1.0",
+    "mocoverage": "~1.0.0",
     "must": "~0.12.0",
     "rimraf": "^2.2.8",
-    "sinon": "~1.12.2"
+    "sinon": "~1.14.1"
   },
   "homepage": "https://github.com/ceejbot/jthoober",
   "keywords": [
@@ -42,8 +58,10 @@
     "url": "https://github.com/ceejbot/jthoober.git"
   },
   "scripts": {
-    "test": "lab -v -l -c   test/",
     "dev": "NODE_ENV=dev node server.js --rules ./example-rules.js --secret sooper-sekrit",
-    "lint": "jshint lib/*.js *.js test/*.js"
+    "lint": "jshint lib/*.js *.js test/*.js",
+    "test": "mocha -t 5000 --check-leaks --ui exports --require blanket -R mocoverage test/test-*.js",
+    "test-cov": "mocha -t 5000 --require blanket -R travis-cov test/test-*.js",
+    "test-travis": "mocha -R spec -t 5000 test/test-*.js && npm run test-cov"
   }
 }

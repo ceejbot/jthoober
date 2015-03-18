@@ -1,10 +1,7 @@
+/*global describe:true, it:true, beforeEach: true, afterEach:true, before:true*/
 'use strict';
 
 var
-    Lab      = require('lab'),
-    lab      = exports.lab = Lab.script(),
-    describe = lab.describe,
-    it       = lab.it,
     crypto   = require('crypto'),
     demand   = require('must'),
     restify  = require('restify'),
@@ -32,7 +29,7 @@ describe('server', function()
     };
     var testServer, testClient, payload;
 
-    lab.before(function(done)
+    before(function(done)
     {
         payload = require('./push_payload.json');
 

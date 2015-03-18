@@ -1,16 +1,12 @@
+/*global describe:true, it:true, beforeEach: true, afterEach:true */
 'use strict';
 
 var
-	Lab = require('lab'),
-	lab = exports.lab = Lab.script(),
-	describe = lab.describe,
-	it = lab.it,
-	beforeEach = lab.beforeEach,
-	demand = require('must'),
-	sinon = require('sinon'),
+	demand  = require('must'),
+	sinon   = require('sinon'),
 	slacker = require('../lib/slacker.js');
 
-describe.only('slacker', function()
+describe('slacker', function()
 {
 	var fauxUrl = 'https://slacker.com';
 
@@ -21,16 +17,15 @@ describe.only('slacker', function()
 			return { slack: fauxUrl };
 		}
 
-		it('creates a client', function(done)
+		it('creates a client', function()
 		{
 			slacker.createClient(makeOptions()).must.exist();
-			done();
 		});
 	});
 
 	describe('#report', function()
 	{
-		beforeEach(function(done)
+		beforeEach(function()
 		{
 			slacker.slackClient = {
 				post: sinon.stub()
@@ -39,24 +34,21 @@ describe.only('slacker', function()
 				error: sinon.stub(),
 				info: sinon.stub()
 			};
-			done();
 		});
 
-		it('does nothing if there is no slack client', function(done)
+		it('does nothing if there is no slack client', function()
 		{
 			slacker.slackClient = void 0;
 			slacker.report('hi').must.be.false();
-			done();
 		});
 
-		it('posts to the slack client', function(done)
+		it('posts to the slack client', function()
 		{
 			slacker.report('hi');
 			slacker.slackClient.post.calledOnce.must.be.true();
-			done();
 		});
 
-		it('posts options to the slack client', function(done)
+		it('posts options to the slack client', function()
 		{
 			var message = 'hi';
 			var options = {
@@ -68,7 +60,6 @@ describe.only('slacker', function()
 				text: message,
 				'icon_url': options.icon_url
 			});
-			done();
 		});
 
 		it('recurses on long messages', function(done)
