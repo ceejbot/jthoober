@@ -67,6 +67,6 @@
     "lint": "jshint lib/*.js *.js test/*.js",
     "test": "mocha -t 5000 --check-leaks --ui exports --require blanket -R mocoverage test/test-*.js",
     "test-cov": "mocha -t 5000 --require blanket -R travis-cov test/test-*.js",
-    "test-travis": "mocha -R spec -t 5000 test/test-*.js && npm run test-cov"
+    "test-travis": "mocha -R spec -t 5000 test/test-*.js"
   }
 }
