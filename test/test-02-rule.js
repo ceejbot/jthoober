@@ -18,7 +18,7 @@ describe('rule', function()
     {
         event: '*',
         pattern: /foo/,
-        script: '/usr/bin/file'
+        script: path.join(__dirname, 'script.sh')
     };
 
     describe('constructor', function()
@@ -198,7 +198,7 @@ describe('rule', function()
             {
                 sawRunning.must.be.true();
                 spy.called.must.be.true();
-                spy.calledWith('bash /usr/bin/file').must.be.true();
+                spy.calledWith('bash ' + goodOptions.script).must.be.true();
 
                 // cleanup
                 child.exec.restore();
@@ -211,8 +211,6 @@ describe('rule', function()
 
         it('it parses stdout output for errors', function(done)
         {
-            var saved = goodOptions.script;
-            goodOptions.script = path.join(__dirname, 'script.sh');
             var rule = new Rule(goodOptions);
             var event =
             {
@@ -229,10 +227,8 @@ describe('rule', function()
             {
                 sawRunning.must.be.true();
                 rule.logger.error.callCount.must.equal(3);
-                rule.logger.debug.callCount.must.equal(2);
+                rule.logger.debug.callCount.must.equal(1);
 
-                // cleanup
-                goodOptions.script = saved;
                 done();
             });
 
@@ -302,7 +298,7 @@ describe('rule', function()
 
             rule.on('complete', function()
             {
-                var expected = '/usr/bin/file foobie master';
+                var expected = goodOptions.script + ' foobie master';
                 spy.called.must.be.true();
                 spy.calledWith(expected).must.be.true();
 
@@ -327,7 +323,7 @@ describe('rule', function()
 
             rule.on('complete', function()
             {
-                var expected = '/usr/bin/file foobie master hi bye';
+                var expected = goodOptions.script + ' foobie master hi bye';
                 spy.called.must.be.true();
                 spy.calledWith(expected).must.be.true();
 
