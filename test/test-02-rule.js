@@ -227,7 +227,6 @@ describe('rule', function()
             {
                 sawRunning.must.be.true();
                 rule.logger.error.callCount.must.equal(3);
-                // console.log(rule.logger.debug.args);
                 rule.logger.debug.callCount.must.equal(1);
 
                 done();
