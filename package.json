@@ -16,21 +16,21 @@
   "dependencies": {
     "bistre": "~1.0.1",
     "bole": "~2.0.0",
-    "github-webhook-handler": "~0.3.4",
+    "github-webhook-handler": "~0.5.0",
     "mkdirp": "~0.5.0",
-    "restify": "~3.0.1",
-    "rimraf": "~2.3.2",
-    "through2": "~0.6.5",
-    "touch": "0.0.3",
-    "yargs": "~3.7.1"
+    "restify": "~4.0.3",
+    "rimraf": "~2.4.3",
+    "through2": "~2.0.0",
+    "touch": "1.0.0",
+    "yargs": "~3.29.0"
   },
   "devDependencies": {
-    "istanbul": "~0.3.13",
-    "mocha": "~2.1.0",
+    "istanbul": "~0.4.0",
+    "mocha": "~2.3.3",
     "mocoverage": "~1.0.0",
-    "must": "~0.12.0",
+    "must": "~0.13.1",
     "rimraf": "^2.2.8",
-    "sinon": "~1.14.1",
+    "sinon": "~1.17.2",
     "travis-cov": "~0.2.5"
   },
   "homepage": "https://github.com/ceejbot/jthoober",
