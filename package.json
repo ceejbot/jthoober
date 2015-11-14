@@ -22,7 +22,7 @@
     "rimraf": "~2.3.2",
     "through2": "~0.6.5",
     "touch": "0.0.3",
-    "yargs": "~3.7.1"
+    "yargs": "~3.30.0"
   },
   "devDependencies": {
     "istanbul": "~0.3.13",
