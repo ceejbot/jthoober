@@ -24,6 +24,7 @@
     "yargs": "~3.30.0"
   },
   "devDependencies": {
+    "eslint": "~1.10.1",
     "istanbul": "~0.4.1",
     "mocha": "~2.3.4",
     "must": "~0.13.1",
@@ -44,7 +45,7 @@
   },
   "scripts": {
     "dev": "NODE_ENV=dev node server.js --rules ./example-rules.js --secret sooper-sekrit",
-    "lint": "jshint lib/*.js *.js test/*.js",
+    "lint": "eslint lib/*.js *.js test/*.js",
     "test": "mocha -t 5000 --check-leaks --ui exports -R spec test/test-*.js",
     "test-travis": "mocha -R spec -t 5000 test/test-*.js",
     "coverage": "istanbul cover _mocha test --recursive -- -u exports -R spec && open coverage/lcov-report/index.html"

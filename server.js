@@ -32,14 +32,13 @@ ruleInput.forEach(function(data)
 	rules.push(new jthoober.Rule(data));
 });
 
-var opts =
-{
-    name:   'jthoober',
-    port:   process.env.PORT || argv.port,
-    host:   process.env.HOST || argv.host,
-    rules:  rules,
-    path:   argv.mount,
-    secret: argv.secret,
+var opts = {
+	name:   'jthoober',
+	port:   process.env.PORT || argv.port,
+	host:   process.env.HOST || argv.host,
+	rules:  rules,
+	path:   argv.mount,
+	secret: argv.secret,
 };
 
 var logger = bole('wrapper');
@@ -62,12 +61,12 @@ if (argv.slack)
 var server = new jthoober.Server(opts);
 server.listen(opts.port, opts.host, function(err)
 {
-    if (err)
-    {
-        logger.error(err, 'while starting up on port ' + opts.port);
-        process.exit(1);
-    }
+	if (err)
+	{
+		logger.error(err, 'while starting up on port ' + opts.port);
+		process.exit(1);
+	}
 
 	// The next line delights me.
-    logger.info('jthoober listening on ' + server.server.address().address + ':' + server.server.address().port);
+	logger.info('jthoober listening on ' + server.server.address().address + ':' + server.server.address().port);
 });

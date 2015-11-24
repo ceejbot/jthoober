@@ -27,9 +27,7 @@ describe('slacker', function()
 	{
 		beforeEach(function()
 		{
-			slacker.slackClient = {
-				post: sinon.stub()
-			};
+			slacker.slackClient = { post: sinon.stub() };
 			slacker.logger = {
 				error: sinon.stub(),
 				info: sinon.stub()
@@ -51,12 +49,9 @@ describe('slacker', function()
 		it('posts options to the slack client', function()
 		{
 			var message = 'hi';
-			var options = {
-				'icon_url': 'http://icon.jpg.to'
-			};
+			var options = { 'icon_url': 'http://icon.jpg.to' };
 			slacker.report(message, options);
-			slacker.slackClient.post.calledWith('',
-			{
+			slacker.slackClient.post.calledWith('', {
 				text: message,
 				'icon_url': options.icon_url
 			});
@@ -65,10 +60,7 @@ describe('slacker', function()
 		it('recurses on long messages', function(done)
 		{
 			var longMessage = (new Array(3000)).join('a');
-			slacker.slackClient.post.yields(null, null,
-			{
-				statusCode: 200
-			});
+			slacker.slackClient.post.yields(null, null, { statusCode: 200 });
 
 			slacker.report(longMessage);
 			slacker.slackClient.post.calledTwice.must.be.true();
@@ -85,10 +77,7 @@ describe('slacker', function()
 
 		it('logs an error on a non-200 response', function(done)
 		{
-			slacker.slackClient.post.yields(null, null,
-			{
-				statusCode: 401
-			});
+			slacker.slackClient.post.yields(null, null, { statusCode: 401 });
 			slacker.report('hi');
 			slacker.logger.error.callCount.must.equal(1);
 			done();
