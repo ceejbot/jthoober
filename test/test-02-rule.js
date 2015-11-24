@@ -226,8 +226,8 @@ describe('rule', function()
             rule.on('complete', function()
             {
                 sawRunning.must.be.true();
-                rule.logger.error.callCount.must.equal(3);
-                rule.logger.debug.callCount.must.equal(1);
+                rule.logger.error.callCount.must.be.above(1);
+                rule.logger.debug.called.must.be.true();
 
                 done();
             });
@@ -256,7 +256,7 @@ describe('rule', function()
                     demand(err).not.exist();
                     data.length.must.be.above(0);
                     // ensure we have some good data
-                    data.indexOf('starting execution; cmd=' + goodOptions.script).must.be.equal.to(30);
+                    data.indexOf('starting execution; cmd=' + goodOptions.script).must.equal(30);
 
                     done();
                 });
@@ -279,7 +279,7 @@ describe('rule', function()
 
             rule.on('complete', function(exitCode, errOutput)
             {
-                exitCode.must.be.equal.to(127);
+                exitCode.must.equal(127);
                 demand(errOutput).must.exist();
                 done();
             });
