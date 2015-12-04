@@ -21,7 +21,7 @@
     "restify": "~4.0.3",
     "through2": "~2.0.0",
     "touch": "~1.0.0",
-    "yargs": "~3.30.0"
+    "yargs": "~3.31.0"
   },
   "devDependencies": {
     "eslint": "~1.10.1",
