@@ -4,3 +4,10 @@
 .npmignore
 .travis.yml
 test/
+.nyc_output
+
+
+.editorconfig
+.eslintrc
+.jshint*
+coverage/
