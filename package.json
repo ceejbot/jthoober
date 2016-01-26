@@ -25,7 +25,7 @@
   },
   "devDependencies": {
     "eslint": "~1.10.3",
-    "mocha": "~2.3.4",
+    "mocha": "~2.4.1",
     "must": "~0.13.1",
     "nyc": "~5.3.0",
     "rimraf": "~2.5.0",
