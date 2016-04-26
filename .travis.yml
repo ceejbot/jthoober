@@ -3,6 +3,6 @@ node_js:
     - "0.10"
     - "4.*"
     - "5.*"
-script:
-  - npm run travis
+script: npm run travis
+after_success: npm run coverage
 sudo: false

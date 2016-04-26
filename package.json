@@ -3,16 +3,16 @@
   "description": "run bash scripts when you get a push event from a github webhook",
   "version": "1.2.0",
   "author": "C J Silverio <ceejceej@gmail.com>",
-  "contributors": [
-    "Joey Baker <joey@byjoeybaker.com>",
-    "C J Silverio <ceejceej@gmail.com>"
-  ],
   "bin": {
     "jthoober": "server.js"
   },
   "bugs": {
     "url": "https://github.com/ceejbot/jthoober/issues"
   },
+  "contributors": [
+    "Joey Baker <joey@byjoeybaker.com>",
+    "C J Silverio <ceejceej@gmail.com>"
+  ],
   "dependencies": {
     "bistre": "~1.0.1",
     "bole": "~2.0.0",
@@ -34,9 +34,9 @@
   },
   "homepage": "https://github.com/ceejbot/jthoober",
   "keywords": [
+    "deploy",
     "github",
-    "webhook",
-    "deploy"
+    "webhook"
   ],
   "license": "ISC",
   "main": "index.js",
@@ -48,7 +48,7 @@
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "dev": "NODE_ENV=dev node server.js --rules ./example-rules.js --secret sooper-sekrit",
     "lint": "eslint lib/*.js *.js test/*.js",
-    "test": "nyc mocha -t 5000 --check-leaks --ui exports -R spec test/test-*.js",
-    "travis": "npm run lint && npm test && npm run coverage"
+    "test": "nyc mocha -t 5000 --check-leaks -R spec test/test-*.js",
+    "travis": "npm run lint && npm test"
   }
 }
