@@ -15,7 +15,7 @@
   ],
   "dependencies": {
     "bistre": "~1.0.1",
-    "bole": "~2.0.0",
+    "bole": "~3.0.0",
     "github-webhook-handler": "~0.5.0",
     "mkdirp": "~0.5.0",
     "restify": "~4.1.0",
