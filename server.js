@@ -33,24 +33,25 @@ ruleInput.forEach(function(data)
 });
 
 var opts = {
-	name:   'jthoober',
-	port:   process.env.PORT || argv.port,
-	host:   process.env.HOST || argv.host,
-	rules:  rules,
-	path:   argv.mount,
-	secret: argv.secret,
+	name: 'jthoober',
+	port: process.env.PORT || argv.port,
+	host: process.env.HOST || argv.host,
+	rules: rules,
+	path: argv.mount,
+	secret: argv.secret
 };
 
 var logger = bole('wrapper');
 var outputs = [];
 if (process.env.NODE_ENV === 'dev')
 {
-	var prettystream = require('bistre')({time: true});
+	var prettystream = require('bistre')({ time: true });
+
 	prettystream.pipe(process.stdout);
-	outputs.push({ level:  'debug', stream: prettystream });
+	outputs.push({ level: 'debug', stream: prettystream });
 }
 else
-	outputs.push({level: 'info', stream: process.stdout});
+	outputs.push({ level: 'info', stream: process.stdout });
 bole.output(outputs);
 
 if (argv.slack)

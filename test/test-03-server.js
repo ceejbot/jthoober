@@ -22,8 +22,8 @@ describe('server', function()
 		path: '/bar',
 		rules: [
 			new Rule({ event: 'ping', pattern: /.*/, func: sinon.spy() }),
-			new Rule({ event: 'push', pattern: /.*/, func: sinon.spy() }),
-		],
+			new Rule({ event: 'push', pattern: /.*/, func: sinon.spy() })
+		]
 	};
 	var testServer, testClient, payload;
 
@@ -35,10 +35,10 @@ describe('server', function()
 			url: 'http://localhost:5757/',
 			headers:
 			{
-				'x-github-event':    'push',
+				'x-github-event': 'push',
 				'x-github-delivery': 'yah',
-				'x-hub-signature':   signPayload('foo', JSON.stringify(payload)),
-			},
+				'x-hub-signature': signPayload('foo', JSON.stringify(payload))
+			}
 		});
 		testServer = new Server(goodOptions);
 		testServer.listen(5757, 'localhost', done);
@@ -109,7 +109,7 @@ describe('server', function()
 			{
 				demand(err).not.exist();
 				resp.statusCode.must.equal(200);
-				body.must.eql({ok:true});
+				body.must.eql({ok: true});
 
 				done();
 			});
