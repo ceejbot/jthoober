@@ -32,6 +32,11 @@
     "rimraf": "~2.5.0",
     "sinon": "~1.17.4"
   },
+  "greenkeeper": {
+    "ignore": [
+      "eslint"
+    ]
+  },
   "homepage": "https://github.com/ceejbot/jthoober",
   "keywords": [
     "deploy",
