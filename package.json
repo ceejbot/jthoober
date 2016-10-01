@@ -18,24 +18,20 @@
     "bole": "~3.0.1",
     "github-webhook-handler": "~0.6.0",
     "mkdirp": "~0.5.0",
-    "restify": "~4.1.0",
+    "restify": "~4.1.1",
     "through2": "~2.0.0",
     "touch": "~1.0.0",
     "yargs": "~6.0.0"
   },
   "devDependencies": {
-    "coveralls": "~2.11.6",
-    "eslint": "2.13.1",
+    "coveralls": "~2.11.14",
+    "eslint-config-ceejbot": "~1.0.1",
     "mocha": "~3.1.0",
-    "must": "~0.13.1",
+    "must": "~0.13.2",
     "nyc": "8.3.0",
-    "rimraf": "~2.5.0",
-    "sinon": "~1.17.4"
-  },
-  "greenkeeper": {
-    "ignore": [
-      "eslint"
-    ]
+    "rimraf": "~2.5.4",
+    "sinon": "~1.17.6",
+    "xo": "~0.16.0"
   },
   "homepage": "https://github.com/ceejbot/jthoober",
   "keywords": [
@@ -52,8 +48,11 @@
   "scripts": {
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "dev": "NODE_ENV=dev node server.js --rules ./example-rules.js --secret sooper-sekrit",
-    "lint": "eslint lib/*.js *.js test/*.js",
+    "lint": "xo",
     "test": "nyc mocha -t 5000 --check-leaks -R spec test/test-*.js",
     "travis": "npm run lint && npm test"
+  },
+  "xo": {
+    "extends": "eslint-config-ceejbot"
   }
 }

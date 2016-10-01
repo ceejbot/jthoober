@@ -83,9 +83,9 @@ describe('rule', function()
 		{
 			function swizzle(event) { event.foo = 'bar'; }
 			var rule = new Rule({
-				event:   '*',
+				event: '*',
 				pattern: /foo/,
-				func:    swizzle
+				func: swizzle
 			});
 
 			rule.must.have.property('func');
@@ -281,8 +281,6 @@ describe('rule', function()
 			goodOptions.passargs = true;
 			var rule = new Rule(goodOptions);
 			var event = { event: 'push', payload: { ref: 'refs/heads/master', repository: { name: 'foobie' }} };
-
-			var child = require('child_process');
 			var spy = sinon.spy(child, 'exec');
 
 			rule.on('complete', function()
@@ -306,8 +304,6 @@ describe('rule', function()
 			goodOptions.args = ['hi', 'bye'];
 			var rule = new Rule(goodOptions);
 			var event = { event: 'push', payload: { ref: 'refs/heads/master', repository: { name: 'foobie' }} };
-
-			var child = require('child_process');
 			var spy = sinon.spy(child, 'exec');
 
 			rule.on('complete', function()
@@ -332,9 +328,9 @@ describe('rule', function()
 			var swizzle = function(event, callback) { event.foo = 'bar'; callback(); };
 			var spy = sinon.spy(swizzle);
 			var rule = new Rule({
-				event:   '*',
+				event: '*',
 				pattern: /foo/,
-				func:    spy
+				func: spy
 			});
 
 			var event = { event: 'push', payload: { ref: 'refs/heads/master', repository: { name: 'foobie' }} };
@@ -355,10 +351,10 @@ describe('rule', function()
 			var args = ['hi', 'bye'];
 			var event = '*';
 			var rule = new Rule({
-				event:   event,
+				event: event,
 				pattern: /foo/,
-				func:    spy,
-				args:    args
+				func: spy,
+				args: args
 			});
 
 			var payload = { event: 'push', payload: { ref: 'refs/heads/master', repository: { name: 'foobie' }} };
@@ -378,9 +374,9 @@ describe('rule', function()
 			var swizzle = function(event, callback) { event.foo = 'bar'; callback(new Error('oops!')); };
 			var spy = sinon.spy(swizzle);
 			var rule = new Rule({
-				event:   '*',
+				event: '*',
 				pattern: /foo/,
-				func:    spy
+				func: spy
 			});
 
 			var event = { event: 'push', payload: { ref: 'refs/heads/master', repository: { name: 'foobie' }} };
