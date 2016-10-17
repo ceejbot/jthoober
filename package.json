@@ -21,7 +21,7 @@
     "restify": "~4.1.1",
     "through2": "~2.0.0",
     "touch": "~1.0.0",
-    "yargs": "~6.0.0"
+    "yargs": "~6.2.0"
   },
   "devDependencies": {
     "coveralls": "~2.11.14",
