@@ -66,14 +66,14 @@ module.exports =
     {
       pattern: /manyissues/,
       event: 'issues',
-      args: [process.env, 'cheddar']
-      func: function(event, env, cheese, cb) { console.log('hi'); cb(); },
+      args: [process.env, 'cheddar'],
+      func: function(event, env, cheese, cb) { console.log('hi'); cb(); }
     },
     {
       pattern: /customLoggers/,
       event: '*',
       // options to pass to bole.output
-      loggers: {level: 'debug', stream: myWritableStream}
+      loggers: {level: 'debug', stream: myWritableStream},
       func: function(event, cb){
         this.logger.info('hi');
         cb();
