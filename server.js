@@ -43,7 +43,7 @@ var opts = {
 
 var logger = bole('wrapper');
 var outputs = [];
-if (process.env.NODE_ENV === 'dev')
+if (process.env.NODE_ENV.match(/^dev/))
 {
 	var prettystream = require('bistre')({ time: true });
 
