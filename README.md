@@ -43,7 +43,6 @@ module.exports =
     { pattern: /request/,
       event: 'push',
       script: './example-script.sh',
-      passargs: true
     },
     { pattern: /reponame/,
       branchPattern: /master/,
@@ -82,9 +81,11 @@ module.exports =
 ];
 ```
 
-Rules may either invoke a script file or call a javascript function. The function will be passed the event object & a callback to fire when complete.
+Rules may either invoke a script file or call a javascript function.
 
-Rules with `passargs` set will receive the repo name as the first script argument & the ref of the commit (aka the branch) as the second. This option is meaningless if you are passing a javascript function instead of invoking an external script. (You have the whole event to play with in that case.)
+A javascript function will be passed the event object & a callback to fire when complete.
+
+All rules receive the repo name as the first script argument & the ref of the commit (aka the branch) as the second. If the event is a *push* event, the third argument is the `after` payload field, aka the hash of the head commit. If you are passing the event to a javascript function instead of invoking an external script, you are given have the whole event to play with.
 
 Valid rules options:
 
@@ -93,10 +94,8 @@ Valid rules options:
 * `event`: required; github event to match on; `*` matches all events
 * `func`: javascript function to invoke on match; mutually exclusive with `script`
 * `script`: external executable to invoke on match
-* `passargs`: if set & truthy, repo name & branch are sent to executable
-* `logfile`: full path of file to log executable output to; unused for functions
-* `cmd`: the executable to run the script with; unused for functions. e.g. `node`
-* `args`: an array of additional args to pass to the script or function. If `parseargs` is `true` these args will come after the repo and branch names. If `func` is passed, these args will come after the event name.
+* `cmd`: the executable to run the script with; unused for functions. e.g. `bash`
+* `args`: an array of additional args to pass to the script or function. These args come after the repo and branch names, at the end of args passed. If `func` is passed, these args will come after the event name.
 * `slack`: an object of slack options to pass to the slack reporter. Only used if `--slack` is passed.
 
 ## Endpoints

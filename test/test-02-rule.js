@@ -4,12 +4,9 @@
 var
 	child    = require('child_process'),
 	demand   = require('must'),
-	fs       = require('fs'),
-	os       = require('os'),
 	sinon    = require('sinon'),
 	Rule     = require('../lib/rule'),
-	path     = require('path'),
-	rimraf   = require('rimraf')
+	path     = require('path')
 	;
 
 describe('rule', function()
@@ -17,7 +14,23 @@ describe('rule', function()
 	var goodOptions = {
 		event: '*',
 		pattern: /foo/,
-		script: path.join(__dirname, 'script.sh')
+		script: path.join(__dirname, 'script.sh'),
+	};
+
+	var pushEvent = {
+		event: 'push',
+		payload: {
+			ref: 'refs/heads/master',
+			repository: { name: 'foobie' },
+			after: 'deadbeef'
+		}
+	};
+
+	var otherEvent = {
+		event: 'ping',
+		payload: {
+			repository: { name: 'foobie' }
+		}
 	};
 
 	describe('constructor', function()
@@ -177,11 +190,6 @@ describe('rule', function()
 			goodOptions.cmd = 'bash';
 			var spy = sinon.spy(child, 'exec');
 			var rule = new Rule(goodOptions);
-			var event = {
-				event: 'push',
-				payload: { repository: { name: 'foobie' }}
-			};
-
 			var sawRunning;
 
 			rule.on('running', function() { sawRunning = true; });
@@ -189,7 +197,7 @@ describe('rule', function()
 			{
 				sawRunning.must.be.true();
 				spy.called.must.be.true();
-				spy.calledWith('bash ' + goodOptions.script).must.be.true();
+				spy.calledWith('bash ' + goodOptions.script + ' foobie master').must.be.true();
 
 				// cleanup
 				child.exec.restore();
@@ -197,17 +205,35 @@ describe('rule', function()
 				done();
 			});
 
-			rule.exec(event);
+			rule.exec(pushEvent);
+		});
+
+		it('only includes repo for non-push events', function(done)
+		{
+			goodOptions.cmd = 'bash';
+			var spy = sinon.spy(child, 'exec');
+			var rule = new Rule(goodOptions);
+			var sawRunning;
+
+			rule.on('running', function() { sawRunning = true; });
+			rule.on('complete', function()
+			{
+				sawRunning.must.be.true();
+				spy.called.must.be.true();
+				spy.calledWith('bash ' + goodOptions.script + ' foobie').must.be.true();
+
+				// cleanup
+				child.exec.restore();
+				delete goodOptions.cmd;
+				done();
+			});
+
+			rule.exec(otherEvent);
 		});
 
 		it('it parses stdout output for errors', function(done)
 		{
 			var rule = new Rule(goodOptions);
-			var event = {
-				event: 'push',
-				payload: { repository: { name: 'foobie' }}
-			};
-
 			var sawRunning;
 			sinon.spy(rule.logger, 'error');
 			sinon.spy(rule.logger, 'debug');
@@ -222,37 +248,7 @@ describe('rule', function()
 				done();
 			});
 
-			rule.exec(event);
-		});
-
-		it('logs to a file if a path is provided', function(done)
-		{
-			var logfile = path.join(os.tmpdir(), '/jthoob/test-rule.log');
-
-			goodOptions.logfile = logfile;
-
-			var rule = new Rule(goodOptions);
-			var event = { event: 'push', payload: { repository: { name: 'foobie' }} };
-
-			rule.on('complete', function()
-			{
-
-				fs.readFile(goodOptions.logfile, 'utf8', function(err, data)
-				{
-					// cleanup, no matter what fails
-					goodOptions.logfile = null;
-					rimraf.sync(logfile);
-
-					demand(err).not.exist();
-					data.length.must.be.above(0);
-					// ensure we have some good data
-					data.indexOf('starting execution; cmd=' + goodOptions.script).must.equal(30);
-
-					done();
-				});
-			});
-
-			rule.exec(event);
+			rule.exec(pushEvent);
 		});
 
 		it('emits a complete event with error data', function(done)
@@ -264,7 +260,6 @@ describe('rule', function()
 			};
 
 			var rule = new Rule(shouldProduceError);
-			var event = { event: 'push', payload: { repository: { name: 'foobie' }} };
 
 			rule.on('complete', function(exitCode, errOutput)
 			{
@@ -273,37 +268,13 @@ describe('rule', function()
 				done();
 			});
 
-			rule.exec(event);
-		});
-
-		it('passes repo & refs if `passargs` is set', function(done)
-		{
-			goodOptions.passargs = true;
-			var rule = new Rule(goodOptions);
-			var event = { event: 'push', payload: { ref: 'refs/heads/master', repository: { name: 'foobie' }} };
-			var spy = sinon.spy(child, 'exec');
-
-			rule.on('complete', function()
-			{
-				var expected = goodOptions.script + ' foobie master';
-				spy.called.must.be.true();
-				spy.calledWith(expected).must.be.true();
-
-				// cleanup
-				spy.restore();
-				delete goodOptions.parseargs;
-				done();
-			});
-
-			rule.exec(event);
+			rule.exec(pushEvent);
 		});
 
 		it('passes additional args when `args` is set', function(done)
 		{
-			goodOptions.passargs = true;
 			goodOptions.args = ['hi', 'bye'];
 			var rule = new Rule(goodOptions);
-			var event = { event: 'push', payload: { ref: 'refs/heads/master', repository: { name: 'foobie' }} };
 			var spy = sinon.spy(child, 'exec');
 
 			rule.on('complete', function()
@@ -313,13 +284,12 @@ describe('rule', function()
 				spy.calledWith(expected).must.be.true();
 
 				// cleanup
-				delete goodOptions.parseargs;
 				delete goodOptions.args;
 				spy.restore();
 				done();
 			});
 
-			rule.exec(event);
+			rule.exec(pushEvent);
 
 		});
 
@@ -333,15 +303,13 @@ describe('rule', function()
 				func: spy
 			});
 
-			var event = { event: 'push', payload: { ref: 'refs/heads/master', repository: { name: 'foobie' }} };
-
 			rule.on('complete', function()
 			{
 				spy.called.must.be.true();
 				done();
 			});
 
-			rule.exec(event);
+			rule.exec(pushEvent);
 		});
 
 		it('calls func() with `args` when provided', function(done)
@@ -357,16 +325,14 @@ describe('rule', function()
 				args: args
 			});
 
-			var payload = { event: 'push', payload: { ref: 'refs/heads/master', repository: { name: 'foobie' }} };
-
 			rule.on('complete', function()
 			{
 				spy.called.must.be.true();
-				spy.calledWith(payload, args[0], args[1]).must.be.true();
+				spy.calledWith(pushEvent, args[0], args[1]).must.be.true();
 				done();
 			});
 
-			rule.exec(payload);
+			rule.exec(pushEvent);
 		});
 
 		it('deals with a func() error when the func() errors', function(done)
