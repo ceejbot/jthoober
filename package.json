@@ -23,7 +23,7 @@
     "yargs": "~6.5.0"
   },
   "devDependencies": {
-    "coveralls": "~2.11.14",
+    "coveralls": "~2.13.0",
     "eslint-config-ceejbot": "~1.0.3",
     "mocha": "~3.2.0",
     "must": "~0.13.2",
