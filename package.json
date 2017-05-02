@@ -20,16 +20,16 @@
     "restify": "~4.3.0",
     "through2": "~2.0.0",
     "touch": "~1.0.0",
-    "yargs": "~6.5.0"
+    "yargs": "~7.1.0"
   },
   "devDependencies": {
-    "coveralls": "~2.11.14",
+    "coveralls": "~2.13.1",
     "eslint-config-ceejbot": "~1.0.3",
-    "mocha": "~3.2.0",
+    "mocha": "~3.3.0",
     "must": "~0.13.2",
-    "nyc": "10.0.0",
-    "sinon": "~1.17.6",
-    "xo": "~0.17.0"
+    "nyc": "10.3.0",
+    "sinon": "~2.2.0",
+    "xo": "~0.18.1"
   },
   "homepage": "https://github.com/ceejbot/jthoober",
   "keywords": [
