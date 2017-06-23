@@ -15,21 +15,21 @@
   ],
   "dependencies": {
     "bistre": "~1.0.1",
-    "bole": "~3.0.1",
+    "bole": "~3.0.2",
     "github-webhook-handler": "~0.6.0",
     "restify": "~4.3.0",
-    "through2": "~2.0.0",
+    "through2": "~2.0.3",
     "touch": "~1.0.0",
-    "yargs": "~6.5.0"
+    "yargs": "~8.0.2"
   },
   "devDependencies": {
-    "coveralls": "~2.11.14",
-    "eslint-config-ceejbot": "~1.0.3",
-    "mocha": "~3.2.0",
-    "must": "~0.13.2",
-    "nyc": "10.0.0",
-    "sinon": "~1.17.6",
-    "xo": "~0.17.0"
+    "coveralls": "~2.13.1",
+    "eslint-config-ceejbot": "~1.1.0",
+    "mocha": "~3.1.2",
+    "must": "~0.13.4",
+    "nyc": "~11.0.2",
+    "sinon": "~2.3.5",
+    "xo": "~0.18.2"
   },
   "homepage": "https://github.com/ceejbot/jthoober",
   "keywords": [
@@ -51,6 +51,11 @@
     "travis": "npm run lint && npm test"
   },
   "xo": {
-    "extends": "eslint-config-ceejbot"
+    "extends": "eslint-config-ceejbot",
+    "rules": { 
+         "prefer-arrow-callback": 0,
+	 "object-shorthand": 0,
+	 "unicorn/prefer-starts-ends-with": 0
+    }
   }
 }
