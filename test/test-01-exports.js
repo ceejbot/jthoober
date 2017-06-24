@@ -1,4 +1,5 @@
 /*global describe:true, it:true, beforeEach: true, afterEach:true */
+/* eslint prefer-arrow-callback:0 */
 'use strict';
 
 var

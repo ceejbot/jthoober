@@ -18,28 +18,9 @@ var argv     = require('yargs')
 	.default('h', 'localhost')
 	.describe('mount', 'path to mount routes on')
 	.default('mount', '/webhook')
-	.describe('slack', 'full url of slack webhook for posting results')
 	.help('help')
 	.argv
 ;
-
-// resolve ./ to the current working directory executing jthoober.
-var rulesModule = argv.rules.match(/^.\//) ? path.resolve(process.cwd(), argv.rules) : argv.rules;
-var ruleInput = require(rulesModule);
-var rules = [];
-ruleInput.forEach(function(data)
-{
-	rules.push(new jthoober.Rule(data));
-});
-
-var opts = {
-	name: 'jthoober',
-	port: process.env.PORT || argv.port,
-	host: process.env.HOST || argv.host,
-	rules: rules,
-	path: argv.mount,
-	secret: argv.secret
-};
 
 var logger = bole('wrapper');
 var outputs = [];
@@ -54,13 +35,28 @@ else
 	outputs.push({ level: 'info', stream: process.stdout });
 bole.output(outputs);
 
-if (argv.slack)
+// resolve ./ to the current working directory executing jthoober.
+var rulesModule = argv.rules.match(/^.\//) ? path.resolve(process.cwd(), argv.rules) : argv.rules;
+var ruleInput = require(rulesModule);
+var rules = [];
+ruleInput.forEach(data =>
 {
-	jthoober.Slacker.createClient(argv);
-}
+	const r = new jthoober.Rule(data);
+	rules.push(r);
+	logger.info(`loaded ${r.name}`);
+});
+
+var opts = {
+	name: 'jthoober',
+	port: process.env.PORT || argv.port,
+	host: process.env.HOST || argv.host,
+	rules: rules,
+	path: argv.mount,
+	secret: argv.secret
+};
 
 var server = new jthoober.Server(opts);
-server.listen(opts.port, opts.host, function(err)
+server.listen(opts.port, opts.host, err =>
 {
 	if (err)
 	{
@@ -68,6 +64,5 @@ server.listen(opts.port, opts.host, function(err)
 		process.exit(1);
 	}
 
-	// The next line delights me.
-	logger.info('jthoober listening on ' + server.server.address().address + ':' + server.server.address().port);
+	logger.info(`jthoober listening on ${server.server.address().address}:${server.server.address().port}`);
 });
