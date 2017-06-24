@@ -1,3 +1,5 @@
+'use strict';
+
 module.exports =
 {
 	Server: require('./lib/jthoober'),

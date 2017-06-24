@@ -1,9 +1,11 @@
 #!/usr/bin/env node
 
-var bole     = require('bole');
-var jthoober = require('./index');
-var path     = require('path');
-var argv     = require('yargs')
+'use strict';
+
+const bole     = require('bole');
+const jthoober = require('./index');
+const path     = require('path');
+const argv     = require('yargs')
 	.usage('Usage: jthoober --rules path/to/rules.js --secret sooper-sekrit')
 	.alias('rules', 'r')
 	.describe('rules', 'path to the rules file')
@@ -22,11 +24,11 @@ var argv     = require('yargs')
 	.argv
 ;
 
-var logger = bole('wrapper');
-var outputs = [];
+const logger = bole('wrapper');
+const outputs = [];
 if (/^dev/.test(process.env.NODE_ENV))
 {
-	var prettystream = require('bistre')({ time: true });
+	const prettystream = require('bistre')({ time: true });
 
 	prettystream.pipe(process.stdout);
 	outputs.push({ level: 'debug', stream: prettystream });
@@ -36,9 +38,9 @@ else
 bole.output(outputs);
 
 // resolve ./ to the current working directory executing jthoober.
-var rulesModule = argv.rules.match(/^.\//) ? path.resolve(process.cwd(), argv.rules) : argv.rules;
-var ruleInput = require(rulesModule);
-var rules = [];
+const rulesModule = argv.rules.match(/^.\//) ? path.resolve(process.cwd(), argv.rules) : argv.rules;
+const ruleInput = require(rulesModule);
+const rules = [];
 ruleInput.forEach(data =>
 {
 	const r = new jthoober.Rule(data);
@@ -46,7 +48,7 @@ ruleInput.forEach(data =>
 	logger.info(`loaded ${r.name}`);
 });
 
-var opts = {
+const opts = {
 	name: 'jthoober',
 	port: process.env.PORT || argv.port,
 	host: process.env.HOST || argv.host,
@@ -55,7 +57,7 @@ var opts = {
 	secret: argv.secret
 };
 
-var server = new jthoober.Server(opts);
+const server = new jthoober.Server(opts);
 server.listen(opts.port, opts.host, err =>
 {
 	if (err)
