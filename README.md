@@ -19,15 +19,12 @@ Options:
   -p, --port   port to listen on                              [default: 5757]
   -h, --host   host to bind to                                [default: "localhost"]
   --mount      path to mount routes on                        [default: "/webhook"]
-  --slack      full url of slack webhook to post results
   --help       Show help
 ```
 
 I like to use nginx to terminate tls then proxy pass through to jthoober. I run it under upstart.
 
 Set up a webhook for a project on github. Point it to your jthoober location & give it the secret string you created earlier. Observe that the test payload makes it through.
-
-Optionally, set up an incoming webhook for your Slack organization to report results to a specific channel.
 
 ### Rules
 
@@ -96,7 +93,6 @@ Valid rules options:
 * `script`: external executable to invoke on match
 * `cmd`: the executable to run the script with; unused for functions. e.g. `bash`
 * `args`: an array of additional args to pass to the script or function. These args come after the repo and branch names, at the end of args passed. If `func` is passed, these args will come after the event name.
-* `slack`: an object of slack options to pass to the slack reporter. Only used if `--slack` is passed.
 
 ## Endpoints
 

@@ -1,4 +1,5 @@
 /*global describe:true, it:true, beforeEach: true, afterEach:true, before:true*/
+/* eslint prefer-arrow-callback:0 */
 'use strict';
 
 var
@@ -44,37 +45,33 @@ describe('server', function()
 		testServer.listen(5757, 'localhost', done);
 	});
 
-	describe('constructor', function(done)
+	describe('constructor', function()
 	{
-		it('requires an options object', function(done)
+		it('requires an options object', function()
 		{
 			function shouldThrow() { return new Server(); }
 			shouldThrow.must.throw(/options object/);
-			done();
 		});
 
-		it('requires a path option', function(done)
+		it('requires a path option', function()
 		{
 			function shouldThrow() { return new Server({}); }
 			shouldThrow.must.throw(/`path`/);
-			done();
 		});
 
-		it('requires a secret option', function(done)
+		it('requires a secret option', function()
 		{
 			function shouldThrow() { return new Server({ path: 'foo' }); }
 			shouldThrow.must.throw(/secret/);
-			done();
 		});
 
-		it('requires a rules array option', function(done)
+		it('requires a rules array option', function()
 		{
 			function shouldThrow() { return new Server({ path: 'foo', secret: 'bar' }); }
 			shouldThrow.must.throw(/rules/);
-			done();
 		});
 
-		it('can be constructed', function(done)
+		it('can be constructed', function()
 		{
 			var j = new Server(goodOptions);
 			j.must.have.property('rules');
@@ -82,12 +79,6 @@ describe('server', function()
 			j.must.have.property('server');
 			j.server.constructor.name.must.equal('Server');
 			j.must.have.property('hookHandler');
-
-			j.must.have.property('logger');
-			j.logger.must.be.a.function();
-			j.logger.must.have.property('info');
-
-			done();
 		});
 	});
 

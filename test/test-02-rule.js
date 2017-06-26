@@ -1,4 +1,5 @@
 /*global describe:true, it:true, beforeEach: true, afterEach:true */
+/* eslint prefer-arrow-callback:0 */
 'use strict';
 
 var
@@ -87,8 +88,12 @@ describe('rule', function()
 			rule.logger.must.have.property('info');
 			rule.must.have.property('script');
 			rule.script.must.equal(goodOptions.script);
-			rule.must.have.property('repo');
+
 			rule.must.have.property('event');
+			rule.event.must.equal(goodOptions.event);
+
+			rule.must.have.property('name');
+			rule.name.must.equal('rule:/foo/:*');
 			done();
 		});
 
