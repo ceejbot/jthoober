@@ -9,10 +9,6 @@
   "bugs": {
     "url": "https://github.com/ceejbot/jthoober/issues"
   },
-  "contributors": [
-    "Joey Baker <joey@byjoeybaker.com>",
-    "C J Silverio <ceejceej@gmail.com>"
-  ],
   "dependencies": {
     "bistre": "~1.0.1",
     "bole": "~3.0.2",
