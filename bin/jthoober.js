@@ -3,7 +3,7 @@
 'use strict';
 
 const bole     = require('bole');
-const jthoober = require('./index');
+const jthoober = require('../index');
 const path     = require('path');
 const argv     = require('yargs')
 	.usage('Usage: jthoober --rules path/to/rules.js --secret sooper-sekrit')
