@@ -361,5 +361,55 @@ describe('rule', function()
 
 			rule.exec(event);
 		});
+
+		it('declines to run if still running', function(done)
+		{
+			function swizzle(event, callback) { setTimeout(callback, 500); }
+			var rule = new Rule({
+				event: '*',
+				pattern: /foo/,
+				func: sinon.spy(swizzle),
+			});
+			const logspy = sinon.spy(rule.logger, 'info');
+
+			rule.once('running', () =>
+			{
+				process.nextTick(function() { rule.exec(pushEvent); });
+			});
+
+			rule.on('complete', () =>
+			{
+				rule.func.calledOnce.must.be.true();
+				logspy.calledWith('declining to execute while still in progress').must.be.true();
+				done();
+			});
+
+			rule.exec(pushEvent);
+		});
+
+		it('runs concurrently if allowed', function(done)
+		{
+			function swizzle(event, callback) { setTimeout(callback, 500); }
+			var rule = new Rule({
+				event: '*',
+				pattern: /foo/,
+				func: sinon.spy(swizzle),
+				concurrentOkay: true,
+			});
+			let count = 0;
+
+			rule.once('running', () =>
+			{
+				process.nextTick(function() { rule.exec(pushEvent); });
+			});
+
+			rule.on('complete', () =>
+			{
+				count++;
+				if (count >= 2) done();
+			});
+
+			rule.exec(pushEvent);
+		});
 	});
 });

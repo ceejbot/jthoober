@@ -1,6 +1,6 @@
 # jthoober
 
-A service to receive github webhook events & run scripts in response. Run custom testing or deploys in response to pushes. Built on top of rvagg's [github-webhook-handler](https://github.com/rvagg/github-webhook-handler) and mcavage's [restify](http://mcavage.me/node-restify/).
+A service to receive github webhook events & run scripts in response. Run custom testing or deploys in response to pushes! Build things!
 
 [![on npm](https://img.shields.io/npm/v/jthoober.svg?style=flat)](https://www.npmjs.org/package/jthoober)  [![Tests](https://img.shields.io/travis/ceejbot/jthoober.svg?style=flat)](http://travis-ci.org/ceejbot/jthoober)  [![Coverage](https://img.shields.io/coveralls/ceejbot/jthoober.svg?style=flat)](https://coveralls.io/github/ceejbot/jthoober?branch=master) [![Dependencies](https://img.shields.io/david/ceejbot/jthoober.svg?style=flat)](https://david-dm.org/ceejbot/jthoober)
 
@@ -28,23 +28,32 @@ Set up a webhook for a project on github. Point it to your jthoober location & g
 
 ### Rules
 
-The rules file must export an array of hashes; each hash is passed to the Rule constructor to make an object. (NOTE: I will make this smarter than that before publishing this.) Set up rules that match repos to scripts to execute when jthoober receives an event. Here are some examples:
+The rules file must export an array of hashes; each hash is passed to the Rule constructor to make an object. Set up rules that match repos to scripts to execute when jthoober receives an event. Here are some examples:
 
 ```javascript
 module.exports =
 [
-    { pattern:/jthoober/,
+    {
+      pattern: /jthoober/,
       event: '*',
       script: '/usr/local/bin/fortune'
     },
-    { pattern: /request/,
+    {
+      pattern: /request/,
       event: 'push',
       script: './example-script.sh',
     },
-    { pattern: /reponame/,
+    {
+      pattern: /reponame/,
       branchPattern: /master/,
       event: 'push',
-      script: './example-script.sh'
+      script: './examples/bash-example.sh'
+    },
+    {
+      pattern: /reponame/,
+      event: 'push',
+      script: './examples/bash-fullevent.sh',
+      fullEvent: true
     },
     {
       pattern: /reponame/,
@@ -64,16 +73,6 @@ module.exports =
       event: 'issues',
       args: [process.env, 'cheddar'],
       func: function(event, env, cheese, cb) { console.log('hi'); cb(); }
-    },
-    {
-      pattern: /customLoggers/,
-      event: '*',
-      // options to pass to bole.output
-      loggers: {level: 'debug', stream: myWritableStream},
-      func: function(event, cb){
-        this.logger.info('hi');
-        cb();
-      }
     }
 ];
 ```
@@ -82,7 +81,9 @@ Rules may either invoke a script file or call a javascript function.
 
 A javascript function will be passed the event object & a callback to fire when complete.
 
-All rules receive the repo name as the first script argument & the ref of the commit (aka the branch) as the second. If the event is a *push* event, the third argument is the `after` payload field, aka the hash of the head commit. If you are passing the event to a javascript function instead of invoking an external script, you are given have the whole event to play with.
+If you set the `fullEvent` boolean option to true, a script rule will be passed the entire JSON webhook event, stringified, as its only argument.
+
+Otherwise, all script rules receive the repo name as the first script argument & the ref of the commit (aka the branch) as the second. If the event is a *push* event, the third argument is the `after` payload field, aka the hash of the head commit. If you are passing the event to a javascript function instead of invoking an external script, you are given have the whole event to play with.
 
 Valid rules options:
 
@@ -93,6 +94,8 @@ Valid rules options:
 * `script`: external executable to invoke on match
 * `cmd`: the executable to run the script with; unused for functions. e.g. `bash`
 * `args`: an array of additional args to pass to the script or function. These args come after the repo and branch names, at the end of args passed. If `func` is passed, these args will come after the event name.
+* `fullEvent`: a boolean, considered only for script rules.
+* `concurrentOkay`: boolean; set to true if a rule should be allowed to be run concurrently with itself
 
 ## Endpoints
 

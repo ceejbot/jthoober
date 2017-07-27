@@ -5,7 +5,7 @@
 var
 	crypto   = require('crypto'),
 	demand   = require('must'),
-	restify  = require('restify'),
+	rclients  = require('restify-clients'),
 	sinon    = require('sinon'),
 	Server   = require('../lib/jthoober'),
 	Rule     = require('../lib/rule')
@@ -32,7 +32,7 @@ describe('server', function()
 	{
 		payload = require('./push_payload.json');
 
-		testClient = restify.createJsonClient({
+		testClient = rclients.createJsonClient({
 			url: 'http://localhost:5757/',
 			headers:
 			{
