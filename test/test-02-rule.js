@@ -364,7 +364,7 @@ describe('rule', function()
 
 		it('declines to run if still running', function(done)
 		{
-			function swizzle(event, callback) { setTimeout(callback, 500); };
+			function swizzle(event, callback) { setTimeout(callback, 500); }
 			var rule = new Rule({
 				event: '*',
 				pattern: /foo/,
@@ -389,7 +389,7 @@ describe('rule', function()
 
 		it('runs concurrently if allowed', function(done)
 		{
-			function swizzle(event, callback) { setTimeout(callback, 500); };
+			function swizzle(event, callback) { setTimeout(callback, 500); }
 			var rule = new Rule({
 				event: '*',
 				pattern: /foo/,
@@ -400,7 +400,7 @@ describe('rule', function()
 
 			rule.once('running', () =>
 			{
-				process.nextTick(function () { rule.exec(pushEvent); });
+				process.nextTick(function() { rule.exec(pushEvent); });
 			});
 
 			rule.on('complete', () =>
