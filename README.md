@@ -95,6 +95,7 @@ Valid rules options:
 * `cmd`: the executable to run the script with; unused for functions. e.g. `bash`
 * `args`: an array of additional args to pass to the script or function. These args come after the repo and branch names, at the end of args passed. If `func` is passed, these args will come after the event name.
 * `fullEvent`: a boolean, considered only for script rules.
+* `concurrentOkay`: boolean; set to true if a rule should be allowed to be run concurrently with itself
 
 ## Endpoints
 
