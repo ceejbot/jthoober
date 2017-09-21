@@ -247,7 +247,7 @@ describe('rule', function()
 			rule.on('complete', function()
 			{
 				sawRunning.must.be.true();
-				rule.logger.error.callCount.must.be.above(1);
+				rule.logger.error.called.must.be.true();
 				rule.logger.debug.called.must.be.true();
 
 				done();

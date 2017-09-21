@@ -16,16 +16,16 @@
     "github-webhook-handler": "~0.6.0",
     "restify": "~5.0.1",
     "through2": "~2.0.3",
-    "yargs": "~8.0.2"
+    "yargs": "~9.0.1"
   },
   "devDependencies": {
     "coveralls": "~2.13.1",
     "eslint-config-ceejbot": "~1.1.0",
-    "mocha": "~3.4.2",
+    "mocha": "~3.5.3",
     "must": "~0.13.4",
-    "nyc": "~11.0.3",
-    "restify-clients": "~1.5.0",
-    "sinon": "~2.4.1",
+    "nyc": "~11.2.1",
+    "restify-clients": "~1.5.1",
+    "sinon": "~3.3.0",
     "xo": "~0.18.2"
   },
   "homepage": "https://github.com/ceejbot/jthoober",
