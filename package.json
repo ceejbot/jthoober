@@ -1,7 +1,7 @@
 {
   "name": "jthoober",
   "description": "run bash scripts when you get a push event from a github webhook",
-  "version": "3.0.1",
+  "version": "4.0.0",
   "author": "C J Silverio <ceejceej@gmail.com>",
   "bin": {
     "jthoober": "bin/jthoober.js"
