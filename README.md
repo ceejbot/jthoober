@@ -81,7 +81,7 @@ Rules may either invoke a script file or call a javascript function.
 
 A javascript function will be passed the event object & a callback to fire when complete.
 
-If you set the `fullEvent` boolean option to true, a script rule will be passed the entire JSON webhook event, stringified, as its only argument.
+If you set the `fullEvent` boolean option to true, a script rule will be passed the entire JSON webhook event, stringified, in the WEBHOOK_EVENT environment variable.
 
 Otherwise, all script rules receive the repo name as the first script argument & the ref of the commit (aka the branch) as the second. If the event is a *push* event, the third argument is the `after` payload field, aka the hash of the head commit. If you are passing the event to a javascript function instead of invoking an external script, you are given have the whole event to play with.
 
